@@ -1,7 +1,5 @@
 # Compiler-2021
 
-信息：最新测试集合GitHash `2de6ba373eee38f596186e98d49ab4808eecb379` 最后更新：2020年3月11日
-
 [TOC]
 
 ### Grading Policy
