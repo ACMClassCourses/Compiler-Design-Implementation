@@ -1,8 +1,8 @@
 # Compiler-2021
 
-   * [<strong>Compiler-2021</strong>](#compiler-2021)
-         * [<strong>Grading</strong> <strong>Policy</strong>](#grading-policy)
-         * [<strong>About</strong> <strong>the</strong> <strong>course</strong>](#about-the-course)
+   * [<strong>Compiler-2021</strong>](#)
+         * [<strong>Grading-Policy</strong>](#grading-policy)
+         * [<strong>About-the-course</strong>](#about-the-course)
          * [<strong>部分术语定义</strong>](#部分术语定义)
          * [<strong>语言基本结构</strong>](#语言基本结构)
       * [<strong>文法规则：</strong>](#文法规则)
