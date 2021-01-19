@@ -1,4 +1,5 @@
 # Compiler-2021
+
    * [<strong>Compiler-2021</strong>](#compiler-2021)
          * [<strong>Grading Policy</strong>](#grading-policy)
          * [<strong>About the course</strong>](#about-the-course)
@@ -574,7 +575,7 @@ for(;;) int a = 0;
 2. 全局变量和局部变量。
 3. 类的一个成员。
 4. 数组对象的一个元素。
-5. 前置++/--的返回值 （e.g. (++(++x))++是合法的）
+5. 前置++/--的返回值 （e.g. (++(++x))++是合法的）（特别地：前缀/后缀加出现在等号左边是未定义的。）
 
 我们的Mx*要求至少支持上述五种类型的左值。更多的左值是未定义的（注意不是语法错误）。
 
@@ -617,6 +618,8 @@ gcc构筑命令：`./configure --prefix=/opt/riscv --with-arch=rv32ima --with-ab
 
 | Component | File Name | Path | Language |
 |:-----------:|-----------|------|:----------:|
+|ANTLR 4.9.1| antlr-4.9.1-complete.jar |`/ulib/java/antlr-4.9.1-complete.jar`|Java|
+|ANTLR 4.9| antlr-4.9-complete.jar |`/ulib/java/antlr-4.9-complete.jar`|Java|
 |ANTLR 4.8| antlr-4.8-complete.jar |`/ulib/java/antlr-4.8-complete.jar`|Java|
 |ANTLR 4.7.2| antlr-4.7.2-complete.jar |`/ulib/java/antlr-4.7.2-complete.jar`|Java|
 |ANTLR 4.7.1| antlr-4.7.1-complete.jar |`/ulib/java/antlr-4.7.1-complete.jar`|Java|
