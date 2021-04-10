@@ -1,6 +1,6 @@
 [submodule "ravel"]
 	path = ravel
-	url = https://github.com/Engineev/ravel
+	url = https://github.com/Yveh/ravel
 [submodule "testcases"]
 	path = testcases
 	url = https://github.com/ZYHowell/Compiler-2021-testcases
