@@ -1,10 +1,10 @@
 # Compiler-2021
 
    * [<strong>Compiler-2021</strong>](#)
-         * [<strong>Grading-Policy</strong>](#grading-policy)
-         * [<strong>About-the-course</strong>](#about-the-course)
-         * [<strong>部分术语定义</strong>](#部分术语定义)
-         * [<strong>语言基本结构</strong>](#语言基本结构)
+      * [<strong>Grading-Policy</strong>](#grading-policy)
+      * [<strong>About-the-course</strong>](#about-the-course)
+      * [<strong>部分术语定义</strong>](#部分术语定义)
+      * [<strong>语言基本结构</strong>](#语言基本结构)
       * [<strong>文法规则：</strong>](#文法规则)
          * [<strong>1</strong> <strong>编码与符号：</strong>](#1-编码与符号)
          * [<strong>2</strong> <strong>关键字：</strong>](#2-关键字)
@@ -400,7 +400,7 @@ int main(){
 
 #### **10.2 双目表达式**
 
-双目表达式的定义和C++类似，在类型`int`,`bool`中，要求表达式两边的对象类型必须一致而表达式两边的对象的常量/变量属性没有特别要求（除了赋值，参阅左值部分定义）。`bool`类型仅可以做`==`和`!=`比较，出现`<=, >=, <, >`的比较是语法错误的。数组对象可以和`null`比较（仅限`!=, ==`）但是不能运算。类对象的运算符重载是未定义的。字符串部分的参阅字符串部分定义。
+双目表达式的定义和C++类似，在类型`int`,`bool`中，要求表达式两边的对象类型必须一致而表达式两边的对象的常量/变量属性没有特别要求（除了赋值，参阅左值部分定义）。`bool`类型仅可以做`==`和`!=`比较，出现`<=, >=, <, >`的比较是语法错误的。数组对象可以和`null`比较（仅限`!=, ==`）但是不能运算。类对象的`==`和`!=`比较是地址的比较，其它运算符重载是未定义的。字符串部分的参阅字符串部分定义。
 
 特殊的是：自增自减运算符在前缀加意义下表达式返回本身的值`+1`或`-1`的值。后缀加/减返回`int`。
 
@@ -417,6 +417,10 @@ int main(){
 或者
 
 `<Type> <VariableIdentifier 1> = <Initial Expression>;`
+
+或者同时声明多个变量和初始值：
+
+`<Type> <VariableIdentifier 1> = <Initial Expression 1>, <VariableIdentifier 2>, <VariableIdentifier 3> = <Initial Expression 3>`
 
 变量在使用之前应当被赋值了，没有赋值的对象直接使用是未定义行为，在一行里对多个参量进行声明赋值是未定义行为。
 
@@ -630,4 +634,4 @@ gcc构筑命令：`./configure --prefix=/opt/riscv --with-arch=rv32ima --with-ab
 
 ## Update Log
 
-预留
+Apr 23rd: 补全变量声明语句的语法；更新了类的`==`和`!=`规则。
