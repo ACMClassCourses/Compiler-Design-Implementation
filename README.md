@@ -417,7 +417,7 @@ Arrays.sort(array, (s1, s2) -> {
 
 基本语法：`[&](Parameters) -> {Statements}`
 
-解释：`[&]`作为关键字符。其余定义同函数。
+解释：`[&]`作为关键字符。其余定义同函数。如果参数为空，参数括号可以省略，调用括号不可以省略。
 
 作用域的解释：Parameters如果出现和全局域重名的变量，应当遵循作用域遮蔽原则。为了简化，Expressions和Statements默认可以访问顶层域的所有对象。
 
@@ -432,7 +432,8 @@ Lambda表达式的调用同函数。
 ``````C
 int sum = [&](int a, int b) -> { return a + b; }(1, 2); // 正确
 int sum2 = [&]() -> { return sum; }(12); // 错误
-int sum3 = [&]() -> { return sum; }(); // 正确。
+int sum3 = [&]() -> { return sum; }(); // 正确
+int foo = [&] -> {return 1;}() // 正确
 ``````
 
 ### **10 表达式：**
