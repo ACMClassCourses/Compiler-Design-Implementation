@@ -30,7 +30,7 @@
             * [<strong>9.1 函数定义</strong>](#91-函数定义)
             * [<strong>9.2 内建函数</strong>](#92-内建函数)
             * [<strong>9.3 函数返回值</strong>](#93-函数返回值)
-            * [<strong>9.4 函数返回值</strong>](#94-Lambda-表达式)
+            * [<strong>9.4 Lambda表达式</strong>](#94-Lambda-表达式)
          * [<strong>10 表达式：</strong>](#10-表达式)
             * [<strong>10.1 单目表达式</strong>](#101-单目表达式)
             * [<strong>10.2 双目表达式</strong>](#102-双目表达式)
