@@ -420,11 +420,9 @@ int main(){
 
 或者同时声明多个变量和初始值：
 
-`<Type> <VariableIdentifier 1> = <Initial Expression 1>, <VariableIdentifier 2>, <VariableIdentifier 3> = <Initial Expression 3>`
+`<Type> <VariableIdentifier 1> = <Initial Expression 1>, <VariableIdentifier 2> = <Initial Expression 2>, <VariableIdentifier 3> = <Initial Expression 3>`
 
-变量在使用之前应当被赋值了，没有赋值的对象直接使用是未定义行为，在一行里对多个参量进行声明赋值是未定义行为。
-
-举例：`int a = 0, b = 0;` 这是未定义的。
+变量在使用之前应当被赋值了，没有赋值的对象直接使用是未定义行为。
 
 对于自定义类的对象声明如果没有进行`new`的实例化操作，默认为null，允许没有赋初值的对象（此时为`null`，保证仅出现在semantic检查阶段）。
 
