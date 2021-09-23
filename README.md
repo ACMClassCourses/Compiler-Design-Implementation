@@ -1,4 +1,4 @@
-# Compiler-2021
+# Compiler-2022
 
    * [<strong>Compiler-2021</strong>](#)
       * [<strong>Grading-Policy</strong>](#grading-policy)
@@ -335,7 +335,7 @@ foo test(){ return this; }
 }
 ``````
 
-注意在Mx*中不支持lambda函数表达式，不支持匿名函数，没有方法声明函数的签名，也不支持在一个函数内嵌套申明另一个子函数或类。
+注意在Mx\*中没有方法声明函数的签名，也不支持在一个函数内嵌套申明另一个子函数或类。**Lambda 表达式与匿名函数在Codegen、Optimize阶段是未定义的。**
 
 #### **9.2 内建函数**
 
@@ -390,6 +390,39 @@ int main(){
   int[] vec = foo(10);
   return vec[11]; // Out-of-range Exception.
 }
+``````
+
+#### **9.4 Lambda 表达式：**
+
+Lambda表达式已经成为现代程序语言中非常重要的一个功能，它可以简化代码。例如如下的两种代码是等效的。
+
+``````Java
+Arrays.sort(array, new Comparator<String>() {
+    public int compare(String s1, String s2) {
+        return s1.compareTo(s2);
+    }
+});
+``````
+
+``````Java
+Arrays.sort(array, (s1, s2) -> {
+            return s1.compareTo(s2);
+        });
+``````
+
+为了让大家熟悉Lambda表达式，我们的编译器需要支持一个非常简单的Lambda表达式。**为了简化，Lambda表达式仅出现在semantic阶段，codegen与optimize阶段出现Lambda表达式是未定义的。**
+
+基本语法：`[&](Parameters) -> {Statements}`
+
+解释：`[&]`作为关键字符。其余定义同函数。
+
+作用域的解释：Parameters如果出现和全局域重名的变量，应当遵循作用域遮蔽原则。为了简化，Expressions和Statements默认可以访问顶层域的所有对象。
+
+例子：
+
+``````C
+int sum = [&](int a, int b) -> { return a + b; }(1, 2); // 正确
+int sum2 = [&]() -> { return sum; }(12); // 错误
 ``````
 
 ### **10 表达式：**
@@ -579,7 +612,9 @@ for(;;) int a = 0;
 4. 数组对象的一个元素。
 5. 前置++/--的返回值 （e.g. (++(++x))++是合法的）（特别地：前缀/后缀加出现在等号左边是未定义的。）
 
-我们的Mx*要求至少支持上述五种类型的左值。更多的左值是未定义的（注意不是语法错误）。
+我们的Mx\*要求至少支持上述五种类型的左值。更多的左值是未定义的（注意不是语法错误）。
+
+### **16** 
 
 ## 编译规则：
 
