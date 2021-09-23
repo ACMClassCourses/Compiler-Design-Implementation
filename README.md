@@ -433,7 +433,7 @@ Lambda表达式的调用同函数。
 int sum = [&](int a, int b) -> { return a + b; }(1, 2); // 正确
 int sum2 = [&]() -> { return sum; }(12); // 错误
 int sum3 = [&]() -> { return sum; }(); // 正确
-int foo = [&] -> {return 1;}() // 正确
+int foo = [&] -> {return 1;}(); // 正确
 ``````
 
 ### **10 表达式：**
