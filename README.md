@@ -1,6 +1,6 @@
 # Compiler-2022
 
-   * [<strong>Compiler-2021</strong>](#)
+   * [<strong>Compiler-2022</strong>](#)
       * [<strong>Grading-Policy</strong>](#grading-policy)
       * [<strong>About-the-course</strong>](#about-the-course)
       * [<strong>部分术语定义</strong>](#部分术语定义)
@@ -30,6 +30,7 @@
             * [<strong>9.1 函数定义</strong>](#91-函数定义)
             * [<strong>9.2 内建函数</strong>](#92-内建函数)
             * [<strong>9.3 函数返回值</strong>](#93-函数返回值)
+            * [<strong>9.4 函数返回值</strong>](#94-Lambda-表达式)
          * [<strong>10 表达式：</strong>](#10-表达式)
             * [<strong>10.1 单目表达式</strong>](#101-单目表达式)
             * [<strong>10.2 双目表达式</strong>](#102-双目表达式)
@@ -410,7 +411,9 @@ Arrays.sort(array, (s1, s2) -> {
         });
 ``````
 
-为了让大家熟悉Lambda表达式，我们的编译器需要支持一个非常简单的Lambda表达式。**为了简化，Lambda表达式仅出现在semantic阶段，codegen与optimize阶段出现Lambda表达式是未定义的。**
+为了让大家熟悉Lambda表达式，我们的编译器需要支持一个非常简单的Lambda表达式。**为了简化，Lambda表达式仅出现在semantic阶段，codegen与optimize阶段出现Lambda表达式是未定义的。Lambda表达式本身作为对象是未定义的。**
+
+同样为了简化，我们的Lambda表达式语法很单一，没有特别的语法糖。
 
 基本语法：`[&](Parameters) -> {Statements}`
 
@@ -418,11 +421,18 @@ Arrays.sort(array, (s1, s2) -> {
 
 作用域的解释：Parameters如果出现和全局域重名的变量，应当遵循作用域遮蔽原则。为了简化，Expressions和Statements默认可以访问顶层域的所有对象。
 
+在这里，我们借用C++中**省略返回值的形式**。你的编译器应该支持通过return语句分析返回值并判断，如果Lambda表达式函数体没有return语句，那么返回值为void。
+
+参数可以留空。
+
+Lambda表达式的调用同函数。
+
 例子：
 
 ``````C
 int sum = [&](int a, int b) -> { return a + b; }(1, 2); // 正确
 int sum2 = [&]() -> { return sum; }(12); // 错误
+int sum3 = [&]() -> { return sum; }(); // 正确。
 ``````
 
 ### **10 表达式：**
@@ -613,8 +623,6 @@ for(;;) int a = 0;
 5. 前置++/--的返回值 （e.g. (++(++x))++是合法的）（特别地：前缀/后缀加出现在等号左边是未定义的。）
 
 我们的Mx\*要求至少支持上述五种类型的左值。更多的左值是未定义的（注意不是语法错误）。
-
-### **16** 
 
 ## 编译规则：
 
