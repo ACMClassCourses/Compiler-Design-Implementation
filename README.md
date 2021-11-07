@@ -498,7 +498,13 @@ if (condition) {
 }
 ``````
 
-其中`condition`字段必须返回`bool`值，并且不能为空。如果`condition`返回了非`bool`值或者空应当视为语法错误。一个`if`语句可以没有`else`部分。
+其中`condition`字段必须返回`bool`值，并且不能为空。如果`condition`返回了非`bool`值或者空应当视为语法错误。
+
+一个`if`语句可以没有`else`部分。若大括号中仅有一个 Expression 或 Statement，则可以省略大括号。如下例：
+
+``````c++
+if (condition) <Expression and Statement if true>
+``````
 
 #### **11.3 循环语句**
 
@@ -510,7 +516,8 @@ while (condition) {
 }
 ``````
 
-如果`condition`返回非`bool`值或者空应当视为语法错误。
+如果`condition`返回非`bool`值或者为空应当视为语法错误。
+
 `for`循环语句语法要求如下：
 
 ``````c++
@@ -519,8 +526,14 @@ for (init; condition; incr) {
 }
 ``````
 
+如果`condition`返回了非`bool`值视为语法错误，但是可以为空。
 
-如果`condition`返回了非`bool`值视为语法错误，但是可以空。
+若大括号中仅有一个 Expression 或 Statement，则可以省略大括号。如下例：
+
+``````c++
+while (condition) <Expression and Statement if true>
+for (init; condition; incr) <Expressions and Statements if true>
+``````
 
 #### **11.4 跳转语句**
 
