@@ -1,4 +1,4 @@
-# Compiler-2022
+# Compiler Design and Implementation Course
 
 ## 目录
 
