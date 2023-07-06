@@ -41,7 +41,6 @@
             - [9.1. 函数定义](#91-函数定义)
             - [9.2. 内建函数](#92-内建函数)
             - [9.3. 函数返回值](#93-函数返回值)
-            - [9.4. Lambda 表达式](#94-lambda-表达式)
         - [10. 表达式](#10-表达式)
             - [10.1. 基础表达式](#101-基础表达式)
             - [10.2. 算数表达式](#102-算数表达式)
@@ -410,8 +409,6 @@ class <classIdentifier> {
 
 > 注意：在 Mx* 语言中不支持声明函数的签名，也不支持在一个函数内嵌套申明另一个子函数或类
 
-**Lambda 表达式与匿名函数在 Codegen、Optimize 阶段视为未定义行为。**
-
 ##### 9.2. 内建函数
 
 以下内建函数不需要定义或声明就直接可以使用：
@@ -464,49 +461,6 @@ class <classIdentifier> {
 >   int[] vec = foo(10);
 >   return vec[11]; // Out-of-range Exception.
 > }
-> ```
-
-##### 9.4. Lambda 表达式
-
-Lambda 表达式已经成为现代程序语言中非常重要的一个功能，它可以简化代码。例如如下的两种代码是等效的：
-
-```java
-Arrays.sort(array, new Comparator<String>() {
-    public int compare(String s1, String s2) {
-        return s1.compareTo(s2);
-    }
-});
-```
-
-```java
-Arrays.sort(array, (s1, s2) -> {
-   return s1.compareTo(s2);
-});
-```
-
-为了让大家熟悉 Lambda 表达式，我们的编译器需要支持一个非常简单的 Lambda 表达式。**为了简化，Lambda 表达式仅出现在 Semantic Check 阶段，Codegen 与 Optimization 阶段出现 Lambda 表达式是未定义的。Lambda 表达式本身作为对象是未定义的。**
-
-同样为了简化，我们的 Lambda 表达式语法很单一，没有特别的语法糖。
-
-基本语法：`[&](Parameters) -> {Statements}`，`[](Parameters) -> {Statements}`
-
-解释：定义同函数。如果参数为空，参数括号可以省略，调用括号不可以省略。不含`[&]`时该内部Statement不可以调用外部的全局变量，仅当存在`[&]`时，内部的Statement可以调用外部的对象。
-
-作用域的解释：Parameters 如果出现和全局域重名的变量，应当遵循作用域遮蔽原则。
-
-在这里，我们借用 C++ 中**省略返回值的形式**。你的编译器应该支持通过 `return` 语句分析返回值并判断，如果 Lambda 表达式函数体没有 `return` 语句，那么返回值为 `void`。
-
-参数可以留空。
-
-Lambda 表达式的调用同函数。
-
-> 示例：
-> 
-> ```c++
-> int sum = [&](int a, int b) -> { return a + b; }(1, 2); // 正确
-> int sum2 = [&]() -> { return sum; }(12); // 错误
-> int sum3 = [&]() -> { return sum; }(); // 正确
-> int foo = [&] -> {return 1;}(); // 正确
 > ```
 
 #### 10. 表达式
