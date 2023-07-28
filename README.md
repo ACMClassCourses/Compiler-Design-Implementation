@@ -692,7 +692,7 @@ gcc构筑命令：`./configure --prefix=/opt/riscv --with-arch=rv32ima --with-ab
 
 1. 生成你的编译器 / Build your compiler : 使用系统编译器编译你的编译器代码构建你的编译器的过程。
 2. 编译目标代码 / Compile target code : 使用构建的编译器编译Mx*语言，如果编译正确输出目标汇编代码，反之编译器应当以非0返回值退出。
-3. 执行目标代码 / Execute target code : 使用模拟器运行你的代码的过程。
+3. 执行目标代码 / Execute target code : 使用模拟器运行你的代码的过程。（模拟器地址： <https://github.com/Engineev/ravel>）
 
 ### 2. 评测指标和基准线的划分
 
