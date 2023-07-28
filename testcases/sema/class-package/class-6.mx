@@ -32,7 +32,8 @@ int main()
 	{
 		c.b = c.b + c.b;
 	}
-	c.b = toString("123.456".parseInt());
+	string s = "123.456";
+	c.b = toString(s.parseInt());
 	if(c.b == toString(123))
 	{
 		println(c.b);
