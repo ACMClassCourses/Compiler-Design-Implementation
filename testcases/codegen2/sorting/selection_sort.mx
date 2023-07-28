@@ -1,0 +1,26 @@
+/*
+//#dump Test Package: Codegen
+//#dump Author: Yunwei Ren
+//#input sorting.in
+//#output sorting.ans
+//#dump ExitCode: 0
+//#dump InstLimit: -1
+*/
+
+void selection_sort(int[] a) {
+  int i;
+  int n = a.size();
+  for (i = 0; i < n - 1; ++i) {
+    int min_pos = i;
+    int j;
+    for (j = i + 1; j < n; ++j) {
+      if (a[j] < a[min_pos])
+        min_pos = j;
+    }
+    int t = a[i];
+    a[i] = a[min_pos];
+    a[min_pos] = t;
+  }
+}
+
+//#include main.mt SORT:selection_sort

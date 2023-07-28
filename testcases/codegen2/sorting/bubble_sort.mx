@@ -1,0 +1,25 @@
+/*
+//#dump Test Package: Codegen
+//#dump Author: Yunwei Ren
+//#input sorting.in
+//#output sorting.ans
+//#dump ExitCode: 0
+//#dump InstLimit: -1
+*/
+
+void bubble_sort(int[] a) {
+  int i;
+  int j;
+  int n = a.size();
+  for (i = 0; i < n - 1; ++i) {
+    for (j = 0; j < n - i - 1; ++j) {
+      if (a[j] < a[j + 1])
+        continue;
+      int t = a[j];
+      a[j] = a[j + 1];
+      a[j + 1] = t;
+    }
+  }
+}
+
+//#include main.mt SORT:bubble_sort

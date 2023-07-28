@@ -1,0 +1,36 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Basic
+Author: Pikachu
+Time: 2020-02-02
+Verdict: Success
+Origin Package: Semantic
+*/
+int main() {
+    int a;
+    bool b;
+    string c;
+    bool flag = true;
+    {
+        if (b == b) {
+            flag = false;
+        }
+        int b;
+        bool c;
+        int a;
+        {
+            int c;
+            if (a + a - a == a) {
+                flag = true;
+            }
+            bool a;
+            string b;                                                                                                 {int [][][][][][][][][][][][][][][][][][][][] a = new int [1][1][1][1][1][1][1][1][1][1][1][1][1][1][1][][][][][];
+                {
+                    return 0;
+                }
+            }
+        }
+    }
+    return 0;
+    return 0;
+}

@@ -1,0 +1,40 @@
+/*
+//#dump Test Package: Codegen
+//#dump Author: Yunwei Ren
+//#input sorting.in
+//#output sorting.ans
+//#dump ExitCode: 0
+//#dump InstLimit: -1
+*/
+
+int partition(int[] a, int p, int r) {
+  int pivot = a[r];
+  int i = p - 1;
+  int j;
+  for (j = p; j < r; ++j) {
+    if (a[j] <= pivot) {
+      ++i;
+      int t = a[i];
+      a[i] = a[j];
+      a[j] = t;
+    }
+  }
+  int t = a[i + 1];
+  a[i + 1] = a[r];
+  a[r] = t;
+  return i + 1;
+}
+
+void quick_sort(int[] a, int p, int r) {
+  if (p >= r)
+    return;
+  int q = partition(a, p, r);
+  quick_sort(a, p, q - 1);
+  quick_sort(a, q + 1, r);
+}
+
+void quick_sort_inf(int[] a) {
+  quick_sort(a, 0, a.size() - 1);
+}
+
+//#include main.mt SORT:quick_sort_inf

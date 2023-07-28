@@ -1,0 +1,73 @@
+/*
+//#dump Test Package: Codegen
+//#dump Author: Yunwei Ren
+//#input shortest_path.1.in
+//#output shortest_path.1.ans
+//#dump ExitCode: 0
+//#dump InstLimit: -1
+*/
+
+// input:
+// n m
+// u_1 v_1 w_1
+// ....
+// u_m v_m w_m
+// (1 <= w_m <= 100)
+
+int INF = 10000000;
+int n;
+int m;
+int[][] a;
+
+void init() {
+  n = getInt();
+  m = getInt();
+  a = new int[n][n];
+
+  int i;
+  int j;
+  for (i = 0; i < n; ++i) {
+    for (j = 0; j < n; ++j) {
+      a[i][j] = INF;
+    }
+  }
+  for (i = 0; i < n; ++i)
+    a[i][i] = 0;
+
+  for (i = 0; i < m; ++i) {
+    int u = getInt();
+    int v = getInt();
+    int w = getInt();
+    a[u][v] = w;
+  }
+}
+
+int main() {
+  init();
+
+  int i;
+  int j;
+  int k;
+  for (k = 0; k < n; ++k) {
+    for (i = 0; i < n; ++i) {
+      for (j = 0; j < n; ++j) {
+        if (a[i][j] > a[i][k] + a[k][j])
+          a[i][j] = a[i][k] + a[k][j];
+      }
+    }
+  }
+
+  for (i = 0; i < n; ++i) {
+    for (j = 0; j < n; ++j) {
+      if (a[i][j] == INF) {
+        print("-1");
+      } else {
+        print(toString(a[i][j]));
+      }
+      print(" ");
+    }
+    println("");
+  }
+
+  return 0;
+}

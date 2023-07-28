@@ -1,0 +1,29 @@
+/*
+Test Package: Codegen
+Author: 09' Xiao Jia
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+1
+1029
+171
+=== end ===
+ExitCode: 0
+InstLimit: -1
+Origin Package: Codegen Pretest-567
+*/
+int gcd(int x, int y) {
+  if (x%y == 0) return y;
+  else return gcd(y, x%y);
+}
+
+int main() {
+    println(toString(gcd(10,1)));
+    println(toString(gcd(34986,3087)));
+    println(toString(gcd(2907,1539)));
+
+    return 0;
+}

@@ -1,0 +1,16 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Break and Continue
+Author: Pikachu
+Time: 2019-10-20
+Verdict: Success
+Origin Package: Semantic Pretest
+*/
+
+int main() {
+    while (1 > 0) { 
+        break;
+        continue;
+    }
+    return 0;
+}

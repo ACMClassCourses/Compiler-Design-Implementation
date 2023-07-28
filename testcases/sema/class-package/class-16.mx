@@ -1,0 +1,18 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Classes
+Author: 17' Yifan Xu
+Time: 2020-02-26
+Verdict: Failed
+Comment: The name of class constructor must be the same as the class name.
+Origin Package: Semantic Pretest
+*/
+class A {};
+class B {
+    A() {}
+};
+
+int main()
+{
+    return 0;
+}

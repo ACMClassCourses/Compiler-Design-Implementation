@@ -1,0 +1,28 @@
+/*
+Test Package: Codegen
+Author: Admin
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 15
+InstLimit: -1
+Origin Package: Codegen Pretest-591
+*/
+int main() {
+    int la = 5;
+    int[] a = new int[la];
+
+    int cnt = 0;
+    int i;
+    for (i = 0; i < la; ++i)
+        a[i] = ++cnt;
+
+    int sum = 0;
+    for (i = 0; i < la; ++i) sum = sum + a[i];
+
+    return sum;
+}

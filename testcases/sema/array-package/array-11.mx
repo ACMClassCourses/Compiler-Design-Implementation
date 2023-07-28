@@ -1,0 +1,14 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Array
+Author: 17' Yifan Xu
+Time: 2020-02-26
+Verdict: Failed
+Comment: The shape of multidimensional array must be specified from left to right.
+Origin Package: Semantic Pretest
+*/
+int main()
+{
+    int[][][] a = new int[1][][1];
+    return 0;
+}

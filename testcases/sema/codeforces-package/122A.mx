@@ -1,0 +1,21 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: codeforces
+Author: Pikachu
+Time: 2020-02-03
+Verdict: Success
+Origin Package:  Codeforces 122A #61467904
+*/
+
+int n;
+int main()
+{
+    //int n;
+    //scanf("%d",&n);
+    n = getInt();
+    if((n%4==0)||(n%7==0)||(n%47==0)||(n%74==0)||(n%477==0))
+        print("YES");
+    else
+        print("NO");
+// printf((n%4==0)||(n%7==0)||(n%47==0)||(n%74==0)||(n%477==0) ? "YES" : "NO");
+}

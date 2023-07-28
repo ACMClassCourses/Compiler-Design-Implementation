@@ -1,0 +1,103 @@
+/*
+//#dump Test Package: Codegen
+//#dump Author: Yunwei Ren
+//#input shortest_path.1.in
+//#output shortest_path.1.ans
+//#dump ExitCode: 0
+//#dump InstLimit: -1
+*/
+
+//#include edge_list.mh
+//#include ../std/heap.mh TYPE:Node
+
+int n;
+int m;
+EdgeList g;
+int INF = 10000000;
+
+void init() {
+  n = getInt();
+  m = getInt();
+  g = new EdgeList();
+  g.init(n, m);
+
+  int i;
+  for (i = 0; i < m; ++i) {
+    int u = getInt();
+    int v = getInt();
+    int w = getInt();
+    g.addEdge(u, v, w);
+  }
+}
+
+class Node {
+  int key_() {
+    return -dist;
+  }
+
+  int node;
+  int dist;
+};
+
+
+int[] dijkstra(int s) {
+  int[] visited = new int[n];
+  int[] d = new int[n];
+  int i;
+  for (i = 0; i < n; ++i) {
+    d[i] = INF;
+    visited[i] = 0;
+  }
+  d[s] = 0;
+
+  Heap_Node q = new Heap_Node();
+  Node src = new Node();
+  src.dist = 0;
+  src.node = s;
+  q.push(src);
+
+  while (q.size() != 0) {
+    Node node = q.pop();
+    int u = node.node;
+    if (visited[u] == 1)
+      continue;
+    visited[u] = 1;
+    int k;
+    for (k = g.first[u]; k != -1; k = g.next[k]) {
+      int v = g.edges[k].to;
+      int w = g.edges[k].weight;
+      int alt = d[u] + w;
+      if (alt >= d[v])
+        continue;
+      d[v] = alt;
+      node = new Node();
+      node.node = v;
+      node.dist = d[v];
+      q.push(node);
+    }
+  }
+
+  return d;
+}
+
+
+
+int main() {
+  init();
+  int i;
+  int j;
+  for (i = 0; i < n; ++i) {
+    int[] d = dijkstra(i);
+    for (j = 0; j < n; ++j) {
+      if (d[j] == INF) {
+        print("-1");
+      } else {
+        print(toString(d[j]));
+      }
+      print(" ");
+    }
+    println("");
+  }
+
+  return 0;
+}

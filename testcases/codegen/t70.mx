@@ -1,0 +1,131 @@
+/*
+Test Package: Codegen
+Author: YifanXu
+Time: 2020-04-09
+Input:
+=== input ===
+4 5
+1 2 2
+1 3 2
+1 4 3
+2 3 4
+3 4 3
+=== end ===
+Output:
+=== output ===
+7
+=== end ===
+ExitCode: 0
+InstLimit: -1
+*/
+
+
+class Edge {
+	int x;
+	int y;
+	int w;
+};
+
+int n;
+int m;
+int ans = 0;
+int[] fa;
+int[] rk;
+Edge[] e;
+
+
+void qsort(Edge[] e, int l, int r)
+{
+	if (l < r)
+	{      
+		int i = l;
+        int j = r;
+        Edge x = e[l];
+		while (i < j)
+		{
+			while(i < j && e[j].w >= x.w) {
+				j--; 
+            }
+			if (i < j) {
+				e[i] = e[j];
+                i++;
+            }
+			while(i < j && e[i].w < x.w) { 
+				i++; 
+            }
+			if (i < j) {
+				e[j] = e[i];
+                j--;
+            }
+		}
+		e[i] = x;
+		qsort(e, l, i - 1);
+		qsort(e, i + 1, r);
+	}
+}
+
+void init() {
+    fa = new int[n + 1];
+    rk = new int[n + 1];
+	int i;
+    for (i = 1; i <= n; ++i) {
+		fa[i] = i;
+		rk[i] = 1;
+	}
+}
+
+int find(int x) {
+	if (x == fa[x]) return x;
+	x = find(fa[x]);
+	return fa[x];
+}
+
+bool union(int x, int y) {
+	x = find(x);
+	y = find(y);
+	if (x == y) return false;
+	if (rk[x] > rk[y]) {
+		fa[y] = x;
+		rk[x] = rk[x] + rk[y];
+	} else {
+		fa[x] = y;
+		rk[y] = rk[y] + rk[x];
+	}
+	return true;
+}
+
+int main() {
+    n = getInt();
+    m = getInt();
+    e = new Edge[m];
+    int i;
+	for (i = 0; i < m; ++i) {
+        Edge ed = new Edge;
+        ed.x = getInt();
+        ed.y = getInt();
+        ed.w = getInt();
+		e[i] = ed;
+	}
+    qsort(e, 0, m - 1);
+	init();
+	i = 0;
+    int j = 0;
+	while (i < n - 1) {
+		if (j >= m) {
+			printInt(-1);
+			return 0;
+		}
+        Edge ed = e[j];
+		++j;
+		if (union(ed.x, ed.y)) {
+			++i;
+			ans = ans + ed.w;
+		}
+	}
+	if (rk[find(1)] == n) {
+        printInt(ans);
+    } else {
+        printInt(-1);
+    }
+	return 0;
+}

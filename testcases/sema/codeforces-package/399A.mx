@@ -1,0 +1,33 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: codeforces
+Author: Pikachu
+Time: 2020-02-02
+Verdict: Success
+Origin Package: Codeforces 399A #44003944
+*/
+int n;
+int p;
+int k;
+int i;
+int main() {
+	n = getInt();
+	p = getInt();
+	k = getInt();
+	if(p-k>1) print("<< ");
+	for(i= p-k; i<=p+k;i++)
+	      if(1<= i && i <= n) {
+	         if(i==p){
+				 print("(");
+				 print(toString(i));
+				 print(") ");
+			 }
+	        else{
+				printInt(i);
+				print(" ");
+			}
+	  }
+	if(p + k < n) print(">> ");
+ 
+	return 0;
+}

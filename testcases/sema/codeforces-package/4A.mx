@@ -1,0 +1,17 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: codeforces
+Author: Pikachu
+Time: 2020-02-02
+Verdict: Success
+Origin Package: Codeforces 4A #57460997
+*/
+int w;
+int main(){
+    w = getInt();
+    if (w%2==0&&w>2) 
+        print("YES");
+    else
+        print("NO");
+    return 0;
+}

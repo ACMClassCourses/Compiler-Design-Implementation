@@ -1,0 +1,26 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Classes
+Author: 15' Yueyang Xianzang
+Time: 2019-10-20
+Verdict: Fail
+Comment: The variable A and class A is dumplicated.
+Origin Package: Semantic Extended
+*/
+class A
+{
+    A func()
+    {
+        A a=this;
+        a=null;
+        return this;
+    }
+    int a;
+}
+int main()
+{
+    A A;
+    A.func();
+    A.func();
+    return 0;
+}

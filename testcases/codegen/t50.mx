@@ -1,0 +1,23 @@
+/*
+Test Package: Codegen
+Author: Admin
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 210
+InstLimit: -1
+Origin Package: Codegen Pretest-588
+*/
+int main() {
+    int n = 10;
+    int sum = 0;
+    int i;
+    for (i = 1; i <= n; ++i) sum = sum + i;
+    int j;
+    for (j = 1; j <= n; ++j) sum = sum + 10 + j;
+    return sum;
+}

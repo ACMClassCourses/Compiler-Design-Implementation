@@ -1,0 +1,24 @@
+/*
+Test Package: Codegen
+Author: 16' Zihan Zhou
+Time: 2020-02-03
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 124
+InstLimit: -1
+Origin Package: Codegen Pretest-946
+*/
+
+int lol (int x) {
+return x + 1;
+}
+
+int c = 123;
+int x = lol(c);
+int main () {
+return x;
+}

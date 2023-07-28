@@ -1,0 +1,27 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Basic
+Author: 16' Xuehui Sun
+Time: 2019-11-11
+Verdict: Fail
+Comment: Duplicate name for function name and class name.
+Origin Package: Semantic Pretest
+*/
+class x
+{
+    int x;
+    x()
+    {
+        x=1;
+    }
+};
+x x(x a)
+{
+    return a;
+}
+int x;
+int main()
+{
+    x a;
+    x(a);
+}

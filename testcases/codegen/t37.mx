@@ -1,0 +1,20 @@
+/*
+Test Package: Codegen
+Author: Admin
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 0
+InstLimit: -1
+Origin Package: Codegen Pretest-575
+*/
+int main() {
+    int[] a;
+    int[] b = new int[10];
+    int[][] c = new int [2][];
+    return 0;
+}

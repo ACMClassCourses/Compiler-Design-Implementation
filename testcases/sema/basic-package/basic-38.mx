@@ -1,0 +1,17 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Basic
+Author: 16' Jinxiao Chen
+Time: 2019-11-11
+Verdict: Fail
+Comment: int cannot be the name of identifier.
+Origin Package: Semantic Pretest
+*/
+class int
+{
+int a;
+};
+int main()
+{
+;;;;;;;;
+}

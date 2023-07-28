@@ -1,0 +1,123 @@
+/*
+Test Package: Optim
+Author: Yifan Xu, 17
+//#input lca.in
+//#output lca.ans
+ExitCode: 0
+InstLimit: -1
+*/
+
+class Edge {
+	int x;
+	int y;
+	int next;
+};
+
+int n;
+int m;
+int root;
+int total = 0;
+int MAX = 20;
+
+int[] first;
+int[] depth;
+int[] ans;
+int[][] f;
+int[] pow;
+Edge[] edge;
+
+void init() {
+    first = new int[n + 1];
+    depth = new int[n + 1];
+    int i;
+    for (i = 0; i <= n; ++i) {
+        first[i] = 0;
+        depth[i] = 0;
+    }
+    ans = new int[m + 1];
+    f = new int[n + 1][MAX + 1];
+    int j;
+    for (i = 0; i <= n; ++i) {
+        for (j = 0; j <= MAX; ++j) {
+            f[i][j] = 0;
+        }
+    }
+    pow = new int[MAX + 1];
+    pow[0] = 1;
+	for (i = 1; i <= MAX; ++i) {
+		pow[i] = 2 * pow[i - 1];
+	}
+    edge = new Edge[2 * n - 1];
+}
+
+void addedge(int x, int y) {
+	++total;
+    edge[total] = new Edge();
+	edge[total].x = x;
+	edge[total].y = y;
+	edge[total].next = first[x];
+	first[x] = total;
+}
+
+void dfs(int x, int parent) {
+	depth[x] = depth[parent] + 1;
+	f[x][0] = parent;
+    int i;
+	for (i = 1; i <= MAX; ++i) {
+		f[x][i] = f[f[x][i - 1]][i - 1];
+	}
+	for (i = first[x]; i != 0; i = edge[i].next) {
+		int y = edge[i].y;
+		if (y != parent) {
+			dfs(y, x);
+		}
+	}
+}
+
+int lca(int a, int b) {
+	if (depth[a] < depth[b]) {
+		int tmp = a;
+		a = b;
+		b = tmp;
+	}
+    int i;
+	for (i = MAX; i >= 0; --i) {
+		if (depth[a] - depth[b] >= pow[i]) {
+			a = f[a][i];
+		}
+	}
+	if (a == b) { 
+        return a;
+    }
+	for (i = MAX; i >= 0; --i) {
+		if (f[a][i] != f[b][i]) {
+			a = f[a][i];
+			b = f[b][i];
+		}
+	}
+	return f[a][0];
+}
+
+int main() {
+    n = getInt();
+    m = getInt();
+    root = getInt();
+    init();
+    int i;
+	for (i = 1; i <= n - 1; ++i) {
+		int x = getInt();
+        int y = getInt();
+		addedge(x, y);
+		addedge(y, x);
+	}
+	dfs(root, 0);
+	for (i = 1; i <= m; ++i) {
+		int a = getInt();
+        int b = getInt();
+		ans[i] = lca(a, b);
+	}
+	for (i = 1; i <= m; ++i) {
+        println(toString(ans[i]));
+	}
+	return 0;
+}

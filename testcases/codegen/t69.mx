@@ -1,0 +1,100 @@
+/*
+Test Package: Codegen
+Author: YifanXu
+Time: 2020-04-09
+Input:
+=== input ===
+4 5
+1 2 2
+1 3 2
+1 4 3
+2 3 4
+3 4 3
+=== end ===
+Output:
+=== output ===
+7
+=== end ===
+ExitCode: 0
+InstLimit: -1
+*/
+
+class Edge {
+	int x;
+	int y;
+	int nxt;
+	int w;
+};
+
+int MAX = 1000000;
+int n;
+int m;
+int tot = 0;
+int ans = 0;
+
+int[] pick; 
+int[] fst; 
+int[] dis;
+
+Edge[] ed;
+
+void addedge(int x, int y, int w) {
+	++tot;
+	ed[tot] = new Edge;
+	ed[tot].x = x;
+	ed[tot].y = y;
+	ed[tot].w = w;
+	ed[tot].nxt = fst[x];
+	fst[x] = tot;
+}
+
+int main() {
+    n = getInt();
+    m = getInt();
+    pick = new int[n + 1];
+    fst = new int[n + 1];
+    dis = new int[n + 1];
+    ed = new Edge[2 * m + 1];
+    int i;
+	for (i = 0; i <= n; ++i) {
+		pick[i] = 0;
+        fst[i] = 0;
+        dis[i] = MAX;
+	}
+	int x;
+    int y;
+    int w;
+	for (i = 1; i <= m; ++i) {
+		x = getInt();
+        y = getInt();
+        w = getInt();
+		addedge(x, y, w);
+		addedge(y, x, w);
+	}
+	x = 1;
+	for (i = 1; i <= n - 1; ++i) {
+		pick[x] = 1;
+        int j;
+		for (j = fst[x]; j != 0; j = ed[j].nxt) {
+			int y = ed[j].y;
+
+			if (pick[y] == 0 && ed[j].w < dis[y]) {
+				dis[y] = ed[j].w;
+			}
+		}
+		x = 0;
+		for (j = 1; j <= n; ++j) {
+			if (pick[j] == 0 && dis[j] < dis[x]) {
+				x = j;
+			}
+		}
+		if (x == 0) {
+			printInt(-1);
+			return 0;
+		}
+		ans = ans + dis[x];
+
+	}
+	printInt(ans);
+	return 0;
+}

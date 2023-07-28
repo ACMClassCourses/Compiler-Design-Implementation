@@ -1,0 +1,69 @@
+//#include array.mh
+
+
+class Heap_TYPE {
+  Heap_TYPE() {
+    storage = new Array_TYPE();
+  }
+
+  void push(TYPE v) {
+    storage.push_back(v);
+    int x = size() - 1;
+    while (x > 0) {
+      int p = pnt(x);
+      if (storage.get(p).key_() >= storage.get(x).key_())
+        break;
+      storage.swap(p, x);
+      x = p;
+    }
+  }
+
+  TYPE pop() {
+    TYPE res = storage.front();
+    storage.swap(0, size() - 1);
+    storage.pop_back();
+    maxHeapify(0);
+    return res;
+  }
+
+  TYPE top() {
+    return storage.front();
+  }
+
+  int size() {
+    return storage.size();
+  }
+
+// private:
+  int lchild(int x) {
+    return x * 2 + 1;
+  }
+
+  int rchild(int x) {
+    return x * 2 + 2;
+  }
+
+  int pnt(int x) {
+    return (x - 1) / 2;
+  }
+
+  void maxHeapify(int x) {
+    int l = lchild(x);
+    int r = rchild(x);
+    int largest = x;
+
+    if (l < size() && storage.get(l).key_() > storage.get(largest).key_())
+      largest = l;
+    if (r < size() && storage.get(r).key_() > storage.get(largest).key_())
+      largest = r;
+
+    if (largest == x)
+      return;
+
+    storage.swap(x, largest);
+    maxHeapify(largest);
+  }
+
+  Array_TYPE storage;
+};
+

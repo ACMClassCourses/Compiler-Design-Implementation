@@ -1,0 +1,24 @@
+/*
+Test Package: Codegen
+Author: Admin
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 10
+InstLimit: -1
+Origin Package: Codegen Pretest-577
+*/
+int min(int a, int b) {
+    if (a <= b) return a;
+    return b;
+}
+
+int main() {
+    int x = 10;
+    int y = 20;
+    return min(x, y);
+}

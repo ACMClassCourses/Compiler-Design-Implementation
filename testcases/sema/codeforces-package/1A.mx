@@ -1,0 +1,16 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: codeforces
+Author: Pikachu
+Time: 2020-02-03
+Verdict: Success
+Origin Package: Codeforces 1A #52940143
+*/
+int n,m,a;
+int main(){
+    n = getInt();
+    m = getInt();
+    a = getInt();
+    print(toString((m+a-1)/a*((n+a-1)/a)));
+    return 0;
+}

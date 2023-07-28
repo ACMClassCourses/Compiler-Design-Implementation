@@ -1,0 +1,24 @@
+/*
+Test Package: Codegen
+Author: Admin
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 210
+InstLimit: -1
+Origin Package: Codegen Pretest-576
+*/
+int main() {
+    int n = 20;
+    int sum = 0;
+    int i = 1;
+    while (i <= n) {
+        sum = sum + i;
+        i = i+1;
+    }
+    return sum;
+}

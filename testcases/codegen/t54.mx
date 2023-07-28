@@ -1,0 +1,33 @@
+/*
+Test Package: Codegen
+Author: Admin
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 30
+InstLimit: -1
+Origin Package: Codegen Pretest-593
+*/
+int main() {
+    int a = 5;
+    int b = 0;
+    int c;
+    bool d = b != 0 && a/b != 1;
+    if (d) {
+        c = 10;
+    } else {
+        c = 20;
+    }
+
+    bool e;
+    e = !(c == 10 && a/b == 0 && a == 5);
+    if (e)
+        c = 30;
+
+    return c;
+}
+

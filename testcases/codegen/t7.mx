@@ -1,0 +1,44 @@
+/*
+Test Package: Codegen
+Author: Haojun Mao
+Time: 2020-01-25
+Input:
+=== input ===
+1
+2
+3
+4
+=== end ===
+Output:
+=== output ===
+0000
+1234
+=== end ===
+ExitCode: 0
+InstLimit: -1
+Origin Package: Codegen Pretest-531
+*/
+//input: 1 2 3 4
+
+int[] a = new int[4];
+int main()
+{
+    int[] b = new int[a.size()];
+	int i;
+    for (i = 0; i < a.size(); i++)
+	{
+		a[i] = 0;
+		b[i] = getInt();
+	}
+	for (i = 0; i < a.size(); i++)
+	{
+		print(toString(a[i]));
+	}
+	println("");
+	a=b;
+	for (i = 0; i < a.size(); i++)
+	{
+		print(toString(a[i]));
+	}
+    return 0;
+}

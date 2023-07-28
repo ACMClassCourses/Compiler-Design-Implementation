@@ -1,0 +1,47 @@
+/*
+//#dump Test Package: Codegen
+//#dump Author: Yunwei Ren
+//#input sorting.in
+//#output sorting.ans
+//#dump ExitCode: 0
+//#dump InstLimit: -1
+*/
+
+//#include ../std/slice.mh TYPE:int
+
+int[] merge(Slice_int l, Slice_int r) {
+  if (l.size() == 0)
+    return r.cloneArray();
+  if (r.size() == 0)
+    return l.cloneArray();
+
+  int[] res = new int[l.size() + r.size()];
+  Slice_int tail = makeSlice_int(res).tail();
+  if (l.get(0) < r.get(0)) {
+    res[0] = l.get(0);
+    tail.copy(makeSlice_int(merge(l.tail(), r)));
+  } else {
+    res[0] = r.get(0);
+    tail.copy(makeSlice_int(merge(l, r.tail())));
+  }
+  return res;
+}
+
+
+void mergeSort(Slice_int a) {
+  if (a.size() == 1)
+    return;
+  int n = a.size();
+  int m = n / 2;
+  mergeSort(a.slice(0, m));
+  mergeSort(a.slice(m, n));
+  a.copy(makeSlice_int(merge(a.slice(0, m), a.slice(m, n))));
+}
+
+
+void mergeSortInf(int[] a) {
+  mergeSort(makeSlice_int(a));
+}
+
+
+//#include main.mt SORT:mergeSortInf

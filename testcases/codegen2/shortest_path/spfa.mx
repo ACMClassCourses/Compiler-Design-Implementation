@@ -1,0 +1,77 @@
+/*
+//#dump Test Package: Codegen
+//#dump Author: Yunwei Ren
+//#input shortest_path.1.in
+//#output shortest_path.1.ans
+//#dump ExitCode: 0
+//#dump InstLimit: -1
+*/
+
+//#include ../std/queue.mh TYPE:int
+//#include edge_list.mh
+
+int n;
+int m;
+EdgeList g;
+int INF = 10000000;
+
+void init() {
+  n = getInt();
+  m = getInt();
+  g = new EdgeList();
+  g.init(n, m);
+
+  int i;
+  for (i = 0; i < m; ++i) {
+    int u = getInt();
+    int v = getInt();
+    int w = getInt();
+    g.addEdge(u, v, w);
+  }
+}
+
+int[] spfa(int s) {
+  int[] d = new int[n];
+  int i;
+  for (i = 0; i < n; ++i) {
+    d[i] = INF;
+  }
+  d[s] = 0;
+
+  Queue_int q = new Queue_int();
+  q.push(s);
+  while (q.size() != 0) {
+    int u = q.pop();
+    int k;
+    for (k = g.first[u]; k != -1; k = g.next[k]) {
+      Edge e = g.edges[k];
+      int v = e.to;
+      if (d[v] > d[u] + e.weight) {
+        d[v] = d[u] + e.weight;
+        q.push(v);
+      }
+    }
+  }
+
+  return d;
+}
+
+int main() {
+  init();
+  int i;
+  int j;
+  for (i = 0; i < n; ++i) {
+    int[] d = spfa(i);
+    for (j = 0; j < n; ++j) {
+      if (d[j] == INF) {
+        print("-1");
+      } else {
+        print(toString(d[j]));
+      }
+      print(" ");
+    }
+    println("");
+  }
+
+  return 0;
+}

@@ -1,0 +1,54 @@
+class Queue_TYPE {
+  Queue_TYPE() {
+    beg = 0;
+    end = 0;
+    storage = new TYPE[16];
+  }
+
+  void push(TYPE v) {
+    if (size() == storage.size() - 1) {
+      doubleStorage();
+    }
+    storage[end] = v;
+    end = (end + 1) % storage.size();
+  }
+
+  TYPE top() {
+    return storage[beg];
+  }
+
+  TYPE pop() {
+    if (size() == 0) {
+      println("Warning: Queue_TYPE::pop: empty queue");
+    }
+    TYPE res = top();
+    beg = (beg + 1) % storage.size();
+    return res;
+  }
+
+  int size() {
+    return (end + storage.size() - beg) % storage.size();
+  }
+
+  void doubleStorage() {
+    TYPE[] copy = storage;
+    int begCopy = beg;
+    int endCopy = end;
+
+    storage = new TYPE[copy.size() * 2];
+    beg = 0;
+    end = 0;
+
+    int i = begCopy;
+    while (i != endCopy) {
+      storage[end] = copy[i];
+      end++;
+      i = (i + 1) % copy.size();
+    }
+  }
+
+
+  TYPE[] storage;
+  int beg;
+  int end;
+};

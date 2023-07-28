@@ -1,0 +1,61 @@
+/*
+Test Package: Optim
+Author: 18' Zonghan YANG
+Time: 2021-03-25
+Input:
+=== input ===
+
+=== end ===
+Output:
+=== output ===
+
+=== end ===
+ExitCode: 0
+RunTimeLimit: 2000000
+OutputLengthLimit: 10000
+CompileTimeLimit: 15
+*/
+
+int rng_seed = 19260817;
+
+int unsigned_shl(int x, int k) {
+    return x << k;
+}
+
+int unsigned_shr(int x, int k) { // k should be (0, 31)
+    int INT_MIN = 1 << 31;
+    if (x >= 0) return x >> k;
+    else return (1 << (31 - k)) | ((x ^ INT_MIN) >> k);
+}
+
+int rng() {
+    int rng_mask = 1073741823;
+    int x = rng_seed;
+    x = x ^ unsigned_shl(x, 13);
+    x = x ^ unsigned_shr(x, 17);
+    x = x ^ unsigned_shl(x, 5);
+    rng_seed = x;
+    return x & rng_mask;
+}
+
+int main() {
+    while (rng_seed % 100 != 0) rng_seed--;
+    int a = rng(), i;
+    int n = (rng() & 127) + 100000;
+    for (i = 0; i < n; ++i) {
+        // dead code begin
+        a = a * 2;
+        a = a + 1;
+        a = a / 2;
+        a = a / 3;
+        a = a / (i + 1);
+        a = a + i;
+        a = a / 100;
+        a = a + i;
+        a = a * a;
+        a = a / 10000;
+        a = a + 1;
+        // dead code end
+    }
+    return 0;
+}

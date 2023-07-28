@@ -1,0 +1,17 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Classes
+Author: Pikachu
+Time: 2020-02-03
+Verdict: Success
+Origin Package: Semantic Extended
+*/
+A get() { return new A; } // this is valid
+
+class A {
+    A() {
+        
+    }
+};
+
+int main() { return 0; }

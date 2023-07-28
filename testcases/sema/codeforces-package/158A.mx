@@ -1,0 +1,25 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: codeforces
+Author: Pikachu
+Time: 2020-02-03
+Verdict: Success
+Origin Package:  Codeforces 158A #62259103
+*/
+
+int[] a = new int[50];
+int m;
+int k;
+int i;
+int main()
+{
+m = getInt();
+k = getInt();
+//scanf("%d%d",&m,&k);
+for(i=0;i<m;i++)
+//scanf("%d",&a[i]);
+a[i] = getInt();
+for(i=0;a[i]>=a[k-1]&&a[i] > 0&&i<m;i++);
+printInt(i);
+//printf("%d",i);
+}

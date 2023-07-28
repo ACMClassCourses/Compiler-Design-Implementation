@@ -1,0 +1,45 @@
+class Edge {
+  int from;
+  int to;
+  int weight;
+};
+
+class EdgeList {
+  void init(int n, int m) {
+    edges = new Edge[m];
+    next = new int[m];
+    first = new int[n];
+    int i;
+    for (i = 0; i < m; ++i)
+      next[i] = -1;
+    for (i = 0; i < n; ++i)
+      first[i] = -1;
+    size = 0;
+  }
+
+  void addEdge(int u, int v, int w) {
+    Edge e = new Edge();
+    e.from = u;
+    e.to = v;
+    e.weight = w;
+
+    edges[size] = e;
+    next[size] = first[u];
+    first[u] = size;
+    ++size;
+  }
+
+  int nVertices() {
+    return first.size();
+  }
+
+  int nEdges() {
+    return edges.size();
+  }
+
+
+  Edge[] edges;
+  int[] next;
+  int[] first;
+  int size;
+};

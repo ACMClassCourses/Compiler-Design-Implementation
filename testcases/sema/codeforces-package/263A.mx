@@ -1,0 +1,33 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: codeforces
+Author: Pikachu
+Time: 2020-02-03
+Verdict: Success
+Origin Package:  Codeforces 263A #48540584
+*/
+
+int n;
+int r;
+int c;
+int i;
+int j;
+int abs(int c){
+    if(c>0) return c;
+    return -c;
+}
+
+int main()
+{
+	// int n,r,c,i,j;
+	for (i=0;i<5;i++)
+		for (j=0;j<5;j++)
+		{
+            n = getInt();
+		//scanf("%d", &n);
+		if (n==1)
+		{r=i;c=j;}}
+    printInt(abs(2-r) + abs(2-c));
+	// printf("%d",abs(2-r)+abs(2-c));
+	return 0;
+}

@@ -1,0 +1,19 @@
+/*
+Test Package: Codegen
+Author: Admin
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 30
+InstLimit: -1
+Origin Package: Codegen Pretest-583
+*/
+int main() {
+    int[] a = new int[1];
+    a[0] = 10;
+    return a[0] + 20;
+}

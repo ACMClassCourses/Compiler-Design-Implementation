@@ -1,0 +1,21 @@
+/*
+Test Package: Codegen
+Author: Admin
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 15
+InstLimit: -1
+Origin Package: Codegen Pretest-573
+*/
+int main() {
+    int a = 5;
+    int b;
+    b = a;
+    int c = a * 2 + b;
+    return c;
+}

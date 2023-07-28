@@ -1,0 +1,25 @@
+/*
+Test Package: Codegen
+Author: 11' Hang Wu
+Time: 2020-01-25
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+2
+=== end ===
+ExitCode: 0
+InstLimit: -1
+Origin Package: Codegen Pretest-538
+*/
+
+int[] a = new int[4];
+int main()
+{
+    int[] b = new int[4];
+    b[2]=2;
+    a=b;
+    println(toString(a[2]));
+    return 0;
+}

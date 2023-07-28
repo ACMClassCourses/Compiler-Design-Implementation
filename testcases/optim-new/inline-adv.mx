@@ -1,0 +1,153 @@
+/*
+Test Package: Codegen
+Author: 18' Zonghan YANG
+Time: 2021-3-25
+Input:
+=== input ===
+
+=== end ===
+Output:
+=== output ===
+
+=== end ===
+ExitCode: 0
+RunTimeLimit: 99999
+OutputLengthLimit: 10000
+CompileTimeLimit: 15
+*/
+
+int w = 0;
+
+int wpp () {
+    w++;
+    return ++w; // even
+}
+
+int wppp() {
+    wpp(); 
+    wpp(); 
+    wpp(); 
+    wpp(); 
+    wpp(); 
+    wpp(); 
+    wpp(); 
+    return wpp();
+}
+
+int wpppp() {
+    wppp();
+    wppp();
+    wppp();
+    wppp();
+    wppp();
+    wppp();
+    return wppp();
+}
+
+int block() {  // may be infinite loop in bad inline
+    return block();
+}
+
+int bblock() { // may be time-consuming
+    wpppp();
+    wpppp();
+    bblock();
+    return bblock();
+}
+
+int add1(int x) {
+	return x + 1;
+}
+
+int add2(int x) {
+    return add1(add1(x));
+}
+int add4(int x) {
+    return add2(add2(x));
+}
+int add8(int x) {
+    return add4(add4(x));
+}
+int add16(int x) {
+    return add8(add8(x));
+}
+int add32(int x) {
+    return add16(add16(x));
+}
+int add64(int x) {
+    return add32(add32(x));
+}
+int add128(int x) {
+    return add64(add64(x));
+}
+int add256(int x) {
+    return add128(add128(x));
+}
+int add512(int x) {
+    return add256(add256(x));
+}
+int add1024(int x) {
+    return add512(add512(x));
+}
+int add2048(int x) {
+    return add1024(add1024(x));
+}
+int add4096(int x) {
+    return add2048(add2048(x));
+}
+int add8192(int x) {
+    return add4096(add4096(x));
+}
+int add16384(int x) {
+    return add8192(add8192(x));
+}
+int add32768(int x) {
+    return add16384(add16384(x));
+}
+int add65536(int x) {
+    return add32768(add32768(x));
+}
+int add131072(int x) {
+    return add65536(add65536(x));
+}
+int add262144(int x) {
+    return add131072(add131072(x));
+}
+int add524288(int x) { // Good luck
+    return add262144(add262144(x));
+}
+
+
+int N = 1;
+int wP() {
+    int i, j, ii, isp;
+    for (i = 3; ; i++) { // anti-constant propagation (hopefully)
+	    ii = i >> 1;
+        isp = 1;
+        for (j = 2; j < ii; j++) {
+			if (i % j == 0) {
+                isp = 0;
+                i++;
+                break;
+            }
+        }
+		if (i > 0 && (i + isp) % 9 == 0) {
+			break;
+		}
+        N = N + isp;
+        i = i + isp;
+    }
+    // N = 6
+    if ((N + wpppp()) % 2 == 0) return add524288(N) - 524288 - 6;
+    block(); block();
+    block(); block();
+    return bblock();
+}
+
+int sanity_check() {
+    return wP() + 1;
+}
+
+int main() {
+    return sanity_check() - 1;
+}

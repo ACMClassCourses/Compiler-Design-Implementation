@@ -1,0 +1,20 @@
+/*
+Test Package: Codegen
+Author: Admin
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 106
+InstLimit: -1
+Origin Package: Codegen Pretest-571
+*/
+int main() {
+    string s1 = "aaa";
+    string s2 = "bbbbb";
+    string s3 = s1 + s2;
+    return s3.length() + s3.ord(5);
+}

@@ -1,0 +1,29 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Function
+Author: Admin
+Time: 2020-02-11
+Verdict: Fail
+Comment: Return type doesn't match in function foo_1.
+Origin Package: Semantic Pretest
+*/
+
+class A{
+    int _;
+    int __;
+    int ____;
+};
+
+int[] foo(){
+    return new int[10];
+}
+
+A[] foo_1(int[] args){
+    return args;
+}
+
+int main() {
+    int[] a = foo();
+    int[] b = foo_1(a);
+    return 0;
+}

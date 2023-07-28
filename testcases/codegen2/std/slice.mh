@@ -1,0 +1,62 @@
+class Slice_TYPE {
+  void init(TYPE[] arr) {
+    storage = arr;
+    beg = 0;
+    end = arr.size();
+  }
+
+  int size() {
+    return end - beg;
+  }
+
+  TYPE get(int n) {
+    return storage[beg + n];
+  }
+
+  void set(int n, TYPE val) {
+    storage[beg + n] = val;
+  }
+
+  Slice_TYPE slice(int l, int r) {
+    Slice_TYPE res = new Slice_TYPE();
+    res.storage = storage;
+    res.beg = beg + l;
+    res.end = beg + r;
+    if (res.beg > storage.size() || res.end > storage.size())
+      println("Warning: Slice_TYPE::slice: out of range");
+    return res;
+  }
+
+  Slice_TYPE tail() {
+    return slice(1, size());
+  }
+
+  void copy(Slice_TYPE arr) {
+    if (size() < arr.size()) {
+      println("Warning: Slice_TYPE::copy: size() < arr.size()");
+    }
+    int i;
+    for (i = 0; i < arr.size(); ++i)
+      storage[beg + i] = arr.get(i);
+  }
+
+  TYPE[] cloneArray() {
+    TYPE[] res = new TYPE[size()];
+    int i;
+    for (i = 0; i < size(); ++i) {
+      res[i] = storage[beg + i];
+    }
+    return res;
+  }
+
+  TYPE[] storage;
+  int beg;
+  int end;
+};
+
+
+Slice_TYPE makeSlice_TYPE(TYPE[] arr) {
+  Slice_TYPE res = new Slice_TYPE();
+  res.init(arr);
+  return res;
+}

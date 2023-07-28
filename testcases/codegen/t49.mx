@@ -1,0 +1,18 @@
+/*
+Test Package: Codegen
+Author: Admin
+Time: 2020-02-02
+Input:
+=== input ===
+=== end ===
+Output:
+=== output ===
+=== end ===
+ExitCode: 2
+InstLimit: -1
+Origin Package: Codegen Pretest-587-Modifiy
+*/
+int main() {
+    string s = "hahaha";
+    return s.substring(2, 4).length();
+}

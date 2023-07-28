@@ -1,0 +1,82 @@
+/*
+Test Package: Codegen
+Author: 15' Bowen Tan
+Time: 2020-02-03
+Input:
+=== input ===
+989898987
+=== end ===
+Output:
+=== output ===
+3
+989898983 2 2
+=== end ===
+ExitCode: 0
+InstLimit: -1
+Origin Package: Codegen Pretest-871
+*/
+int n;
+
+void init() {
+    n = getInt();
+}
+
+bool is_prime(int x) {
+    if (x == 1) {
+        return false;
+    }
+    int i;
+    for (i = 2; i * i <= x; i ++) {
+        if (x % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void find(int x, int pre) {
+    if (is_prime(x)) {
+        if (pre > 0) {
+            //printf("2\n");
+            println("2");
+            //printf("%d %d\n", pre, x);
+            println(toString(pre) + " " + toString(x));
+        } else {
+            //printf("1\n%d\n", x);
+            println("1");
+            println(toString(x));
+        }
+        return ;
+    }
+    int i = 5;
+    if (pre == -1) {
+        int i = 6;
+        for (i = x - 2; ; i --) {
+            if (is_prime(i)) {
+                find(x - i, i);
+                return ;
+            }
+        }
+    } else {
+        for (i = x - 1; ; i --) {
+            if (is_prime(i) && is_prime(x - i)) {
+                //printf("3\n%d %d %d\n", pre, i, x - i);
+                println("3");
+                println(toString(pre) + " " + toString(i) + " " + toString(x - i));
+                return ;
+            }
+        }
+    }
+}
+
+void work() {
+    find(n, -1);
+}
+
+int main() {
+
+    init();
+    work();
+    
+    return 0;
+}

@@ -1,0 +1,69 @@
+class Array_TYPE {
+  Array_TYPE() {
+    sz = 0;
+    storage = new TYPE[16];
+  }
+
+  void push_back(TYPE v) {
+    if (size() == storage.size()) {
+      doubleStorage();
+    }
+    storage[sz] = v;
+    ++sz;
+  }
+
+  TYPE pop_back() {
+    --sz;
+    return storage[sz];
+  }
+
+  TYPE back() {
+    return storage[sz - 1];
+  }
+
+  TYPE front() {
+    return storage[0];
+  }
+
+  int size() {
+    return sz;
+  }
+
+  void resize(int newSize) {
+    while (storage.size() < newSize)
+      doubleStorage();
+    sz = newSize;
+  }
+
+  TYPE get(int i) {
+    return storage[i];
+  }
+
+  void set(int i, TYPE v) {
+    storage[i] = v;
+  }
+
+  void swap(int i, int j) {
+    TYPE t = storage[i];
+    storage[i] = storage[j];
+    storage[j] = t;
+  }
+
+
+//private:
+  void doubleStorage() {
+    TYPE[] copy = storage;
+    int szCopy = sz;
+
+    storage = new TYPE[copy.size() * 2];
+    sz = 0;
+
+    for (; sz != szCopy; ++sz) {
+      storage[sz] = copy[sz];
+    }
+  }
+
+
+  TYPE[] storage;
+  int sz;
+};

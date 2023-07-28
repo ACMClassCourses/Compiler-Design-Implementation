@@ -1,0 +1,22 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Function
+Author: Admin
+Time: 2020-02-11
+Verdict: Success
+Origin Package: Semantic Pretest
+*/
+
+int[] foo(){
+    return new int[10];
+}
+
+int[] foo_1(int[] args){
+    return args;
+}
+
+int main() {
+    int[] a = foo();
+    int[] b = foo_1(a);
+    return 0;
+}
