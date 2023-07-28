@@ -1,9 +1,3 @@
-[submodule "ravel"]
-	path = ravel
-	url = https://github.com/Yveh/ravel
-[submodule "testcases"]
-	path = testcases
-	url = https://github.com/ZYHowell/Compiler-2021-testcases
 [submodule "tutorial/Yx"]
 	path = tutorial/Yx
 	url = https://github.com/ZYHowell/Yx
