@@ -1,0 +1,17 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Ternary Expression
+Author: 21' LIU Yiyu
+Time: 2023-08-02
+Verdict: Fail
+Comment: ? and : don't match
+Origin Package: Semantic Extended
+*/
+int main() {
+    int a = 1, b = 2, c = 3;
+    int d = (a++ == b) ? (a++ == b) ? ++c : ++a : (a++ == b) ? (++b == c++) ? ++b : ++c;
+    printInt(a);
+    printInt(b);
+    printInt(c);
+    printInt(d);
+}
