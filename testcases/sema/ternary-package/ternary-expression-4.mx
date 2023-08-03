@@ -1,0 +1,37 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Ternary Expression
+Author: 21' LIU Yiyu
+Time: 2023-08-03
+Verdict: Success
+Origin Package: Semantic Extended
+*/
+
+void foo1() {
+    println("aaa");
+}
+
+void foo2() {
+    println("bbb");
+}
+
+void foo3() {
+    println("ccc");
+}
+
+void foo4() {
+    println("ddd");
+}
+
+void foo5() {
+    println("eee");
+}
+
+int main() {
+    int a = 1, b = 2, c = 3;
+    (a++ == b) ? (a++ == b) ? foo1() : foo2() : (a++ == b) ? (++b == c++) ? foo3() : foo4() : foo5();
+    printInt(a);
+    printInt(b);
+    printInt(c);
+    printInt(d);
+}

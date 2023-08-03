@@ -189,3 +189,4 @@
 ./ternary-package/ternary-expression-1.mx
 ./ternary-package/ternary-expression-2.mx
 ./ternary-package/ternary-expression-3.mx
+./ternary-package/ternary-expression-4.mx
