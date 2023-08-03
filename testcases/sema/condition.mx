@@ -3,6 +3,7 @@ Test Package: Sema_Local_Preview
 Test Target: Conditions and scopes
 Author: Pikachu
 Time: 2019-10-13
+Verdict: Fail
 */
 class S{
     int a;

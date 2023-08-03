@@ -3,6 +3,7 @@ Test Package: Sema_Local_Preview
 Test Target: Bool compares
 Author: Pikachu
 Time: 2019-10-14
+Verdict: Fail
 */
 
 void f(int x, int y, int z){

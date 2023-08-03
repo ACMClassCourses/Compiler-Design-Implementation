@@ -3,7 +3,7 @@ Test Package: Sema_Local_Preview
 Test Target: Array
 Author: 17' Yifan Xu
 Time: 2020-02-26
-Verdict: Failed
+Verdict: Fail
 Comment: The shape of multidimensional array must be specified from left to right.
 Origin Package: Semantic Pretest
 */
