@@ -15,7 +15,7 @@ class A
         return this;
     }
     int a;
-}
+};
 int main()
 {
     A A;

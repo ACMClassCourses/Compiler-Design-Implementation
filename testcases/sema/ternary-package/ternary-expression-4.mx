@@ -33,5 +33,4 @@ int main() {
     printInt(a);
     printInt(b);
     printInt(c);
-    printInt(d);
 }
