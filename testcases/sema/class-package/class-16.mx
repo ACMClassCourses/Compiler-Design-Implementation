@@ -3,7 +3,7 @@ Test Package: Sema_Local_Preview
 Test Target: Classes
 Author: 17' Yifan Xu
 Time: 2020-02-26
-Verdict: Failed
+Verdict: Fail
 Comment: The name of class constructor must be the same as the class name.
 Origin Package: Semantic Pretest
 */
