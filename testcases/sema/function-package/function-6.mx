@@ -9,9 +9,9 @@ Origin Package: Semantic Pretest
 */
 
 class A{
-    int _;
-    int __;
-    int ____;
+    int a;
+    int b;
+    int c;
 };
 
 int[] foo(){
