@@ -1,0 +1,27 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Ternary Expression
+Author: 22' Wang Kunpeng
+Time: 2023-08-04
+Verdict: Success
+Origin Package: Semantic Extended
+*/
+
+class A {
+    int a;
+    int f() {
+        return a;
+    }
+    A copy() {
+        return this;
+    }
+};
+
+int main() {
+    A hh = new A;
+    A hhhh = hh.f() < 0 ? null : hh.copy();
+    A hhhhhh = hhhh.f() > 0 ? hhhh.copy() : null;
+    int[] ar = new int[10];
+    int[] br = ar[9] > ar[1] ? ar : null;
+    return hhhhhh.copy().copy().copy().copy().f() + br[0];
+}
