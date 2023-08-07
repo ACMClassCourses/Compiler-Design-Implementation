@@ -1,0 +1,16 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Ternary Expression
+Author: 22' Xu Ziyi
+Time: 2023-08-07
+Verdict: Success
+Origin Package: Semantic Extended
+*/
+
+
+int main() {
+    int x = 0 , y = 1;
+
+    // This is a valid C++ expression.
+    return (x == 3 ? x : (x = (y = x) = (x = y))) = y;
+}

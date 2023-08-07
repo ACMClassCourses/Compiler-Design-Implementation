@@ -1,0 +1,26 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Ternary Expression
+Author: 22' Xu Ziyi
+Time: 2023-08-07
+Verdict: Fail
+Comment: LHS expressions not assignable.
+Origin Package: Semantic Extended
+*/
+
+class A {
+    int x;
+};
+
+int main() {
+    string github;
+    int []beast = new int[1919810];
+    A t = new A;
+
+    // All these should fail!
+
+    (true ? "DarkSharpness" : github) = "Follow me qwq~";
+    ((t.x == 0) ? null : t) = t;
+    (false ? null : beast) = null;
+    return 114514;
+}
