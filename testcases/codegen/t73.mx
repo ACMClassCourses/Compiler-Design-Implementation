@@ -1,0 +1,46 @@
+/*
+Test Package: Codegen
+Author: 21' LIU Yiyu
+Time: 2023-08-07
+Input
+=== input ===
+1 2 3
+=== end ===
+Output:
+=== output ===
+ccc
+3
+3
+4
+=== end ===
+ExitCode: 0
+InstLimit: -1
+*/
+
+void foo1() {
+    println("aaa");
+}
+
+void foo2() {
+    println("bbb");
+}
+
+void foo3() {
+    println("ccc");
+}
+
+void foo4() {
+    println("ddd");
+}
+
+void foo5() {
+    println("eee");
+}
+
+int main() {
+    int a = getInt(), b = getInt(), c = getInt();
+    (a++ == b) ? (a++ == b) ? foo1() : foo2() : (a++ == b) ? (++b == c++) ? foo3() : foo4() : foo5();
+    printlnInt(a);
+    printlnInt(b);
+    printlnInt(c);
+}

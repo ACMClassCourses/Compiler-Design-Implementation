@@ -1,0 +1,23 @@
+/*
+Test Package: Codegen
+Author: 21' LIU Yiyu
+Time: 2023-08-07
+Input
+=== input ===
+1 2 3
+=== end ===
+Output:
+=== output ===
+2
+=== end ===
+ExitCode: 0
+InstLimit: -1
+*/
+
+int main() {
+    int a = getInt(), b = getInt(), c = getInt();
+    bool t = (++a == b ? "uyy" : "yuy") == (b == --c ? "uyy" : "yuv");
+    if (t) {
+        printlnInt(a);
+    }
+}
