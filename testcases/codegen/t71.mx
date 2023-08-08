@@ -2,7 +2,7 @@
 Test Package: Codegen
 Author: 21' LIU Yiyu
 Time: 2023-08-07
-Input
+Input:
 === input ===
 1 2 3
 === end ===
