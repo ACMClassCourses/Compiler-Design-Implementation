@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Usage: scripts/test.bash <compiler> <testcase>
+# Example:
+#     scripts/test.bash '../../mxc -fsyntax-only' ./array-package/array-1.mx
+
 # Uasge
 if [ $# -ne 2 ]; then
     echo "Usage: $0 <complier> <testcase>" >&2

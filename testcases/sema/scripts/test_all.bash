@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # This script should be used in the directory 'testcases/sema'.
+# Usage: scripts/test_all.bash <compiler>
+# Example:
+#     scripts/test_all.bash '../../mxc -fsyntax-only'
 
 error_from_wrong_working_directory() {
     echo "ERROR: The working directory is not okay!" >&2
