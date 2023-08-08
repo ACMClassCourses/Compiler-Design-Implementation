@@ -21,7 +21,7 @@ elif [ ! -f judgelist.txt ]; then
     error_from_wrong_working_directory
 fi
 
-# jdudge_one_testscase <testcase>
+# judge_one_testscase <testcase>
 judge_one_testcase() {
     scripts/test.bash "$COMPILER" $1 > /dev/null 2>&1
     if [ $? -ne 0 ]; then
