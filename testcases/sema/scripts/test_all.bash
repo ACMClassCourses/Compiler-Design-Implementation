@@ -23,7 +23,7 @@ fi
 
 # jdudge_one_testscase <testcase>
 judge_one_testcase() {
-    scripts/test.bash $COMPILER $1 > /dev/null 2>&1
+    scripts/test.bash "$COMPILER" $1 > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         print_red_err "Fail to pass testcase: '$1'."
         return 1
@@ -34,6 +34,9 @@ judge_one_testcase() {
 
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <complier>" >&2
+    echo "       If you need to pass arguments to the compiler, please use" >&2
+    echo "       quotation mark(') to pack the arguments along with the compiler" >&2
+    echo "       command. For example, $0 './my_compiler -a -b -c'." >&2
     exit 1
 else
     COMPILER=$1
@@ -47,7 +50,7 @@ else
         fi
     done < judgelist.txt
     if [ $wrong_count -eq 0 ]; then
-        echo "\033[32mPassed all testcases.\033[0m" >&2
+        echo -e "\033[32mPassed all testcases.\033[0m" >&2
     else
         echo "$(( total_count - wrong_count ))/$total_count passed, $wrong_count/$total_count failed." >&2
     fi
