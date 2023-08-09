@@ -42,7 +42,8 @@ print_detail() {
     echo "            \"Dependency\": 0," >> $DIR/config.json
     echo "            \"TimeLimit\": 1000," >> $DIR/config.json
     echo "            \"MemoryLimit\": 536870912," >> $DIR/config.json
-    echo "            \"DiskLimit\": 10," >> $DIR/config.json
+    echo "            \"DiskLimit\": -536870912," >> $DIR/config.json
+    echo "            \"FileNumberLimit\": 10," >> $DIR/config.json
     echo "            \"ValgrindTestOn\": false" >> $DIR/config.json
     if [ $1 -eq $count ]; then
         echo "        }" >> $DIR/config.json
@@ -61,6 +62,7 @@ for (( i = 1; i <= $count; i++ )); do
     print_detail $i
 done
 echo "    ]," >> $DIR/config.json
-echo "    \"CompileTimeLimit\": 10000," >> $DIR/config.json
-echo "    \"SPJ\": 1" >> $DIR/config.json
+echo "    \"CompileTimeLimit\": 120000," >> $DIR/config.json
+echo "    \"SPJ\": 1," >> $DIR/config.json
+echo "    \"CompilerStage\": \"-fsyntax-only\"" >> $DIR/config.json
 echo "}" >> $DIR/config.json
