@@ -11,7 +11,7 @@ if [ $# -ne 2 ]; then
 fi
 
 if [ ! -f $2 ]; then
-    echo "Error: testcase file $1 does not exist" >&2
+    echo "Error: testcase file $2 does not exist" >&2
     exit 1
 fi
 
