@@ -19,8 +19,11 @@ if [ ${SEMA_DIR: -1:1} != "/" ]; then
     SEMA_DIR="$SEMA_DIR/"
 fi
 
-print_red_err() {
+print_red_msg() {
     echo -e "\033[31m$1\033[0m" >&2
+}
+print_green_msg() {
+    echo -e "\033[32m$1\033[0m" >&2
 }
 
 if [ ! -x ${SEMA_DIR}scripts/test.bash ]; then
@@ -35,9 +38,10 @@ fi
 judge_one_testcase() {
     ${SEMA_DIR}scripts/test.bash "$COMPILER" $1 > /dev/null 2>&1
     if [ $? -ne 0 ]; then
-        print_red_err "Fail to pass testcase: '$1'."
+        print_red_msg "Fail to pass testcase: '$1'."
         return 1
     else
+        print_green_msg "Pass testcases: '$1'"
         return 0
     fi
 }
@@ -51,7 +55,7 @@ while read line; do
     fi
 done < ${SEMA_DIR}judgelist.txt
 if [ $wrong_count -eq 0 ]; then
-    echo -e "\033[32mPassed all testcases.\033[0m" >&2
+    print_green_msg "Passed all testcases."
 else
-    echo "$(( total_count - wrong_count ))/$total_count passed, $wrong_count/$total_count failed." >&2
+    print_red_msg "$(( total_count - wrong_count ))/$total_count passed, $wrong_count/$total_count failed."
 fi
