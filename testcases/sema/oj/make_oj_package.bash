@@ -23,11 +23,11 @@ cp oj/spj.cpp $DIR/spj.cpp
 
 # Make config
 
-# print_group <index> <total>
+# print_group <index> <total> <name>
 print_group() {
     echo "        {" >> $DIR/config.json
     echo "            \"GroupID\": $1," >> $DIR/config.json
-    echo "            \"GroupName\": \"$1\",">> $DIR/config.json
+    echo "            \"GroupName\": \"$3\",">> $DIR/config.json
     echo "            \"GroupScore\": 1," >> $DIR/config.json
     echo "            \"TestPoints\": [ $1 ]" >> $DIR/config.json
     if [ $1 -eq $2 ]; then
@@ -53,9 +53,12 @@ print_detail() {
 }
 echo "{" > $DIR/config.json
 echo "    \"Groups\": [" >> $DIR/config.json
-for (( i = 1; i <= $count; i++ )); do
-    print_group $i $count
-done
+total=$count
+count=0
+while read line; do
+    (( count += 1 ))
+    print_group $count $total $line
+done < judgelist.txt
 echo "    ]," >> $DIR/config.json
 echo "    \"Details\": [" >> $DIR/config.json
 for (( i = 1; i <= $count; i++ )); do
