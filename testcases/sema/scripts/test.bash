@@ -4,7 +4,7 @@
 # Example:
 #     scripts/test.bash '../../mxc -fsyntax-only' ./array-package/array-1.mx
 
-# Uasge
+# Usage
 if [ $# -ne 2 ]; then
     echo "Usage: $0 <complier> <testcase>" >&2
     exit 1
