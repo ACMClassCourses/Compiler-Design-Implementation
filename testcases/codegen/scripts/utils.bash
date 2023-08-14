@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# test_command <command>
 test_bin() {
     which $1 > /dev/null 2> /dev/null
     if [ $? -ne 0 ]; then
