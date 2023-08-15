@@ -20,17 +20,18 @@ sed -n '/=== output ===/,/=== end ===/{//!p}' $ANSWER > answer.txt
 if [ $? -ne 0 ]; then
     exit 1
 fi
-EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
+EXPECTED_EXIT_CODE=$(grep "ExitCode:" $ANSWER | awk '{print $2}')
 
 if [ -f "$BIN/builtin.s" ]; then
     BUILTIN="$BIN/builtin.s"
 fi
 
-ravel --input-file=input.txt --output-file=output.txt $OUTPUT $BUILTIN > ravel_output.txt
+ravel --input-file=input.txt --output-file=output.txt $OUTPUT $BUILTIN > ravel_output.txt 2> ravel_error.txt
 RAVEL_EXITCODE=$?
 if [ $RAVEL_EXITCODE -ne 0 ]; then
     echo 0 > $SCORE
     echo "Ravel exit with code $RAVEL_EXITCODE" > $MSG
+    cat ravel_error.txt >> $MSG
     exit 0
 fi
 
@@ -55,7 +56,7 @@ if [ $DIFF_EXITCODE -ne 0 ]; then
     HAS_PROBLEM=1
     echo "Wrong answer." > $MSG
 fi
-EXIT_CODE=$(grep 'exit code' $OUTPUT | sed 's/exit code: //')
+EXIT_CODE=$(grep 'exit code' ravel_output.txt | sed 's/exit code: //')
 if [ $EXIT_CODE -ne $EXPECTED_EXIT_CODE ]; then
     HAS_PROBLEM=1
     echo "Wrong exit code." > $MSG
