@@ -42,7 +42,7 @@ CHECKER_EXITCODE=$?
 
 if [ $DIFF_EXITCODE -ne $CHECKER_EXITCODE ]; then
     echo 0 > $SCORE
-    echo << EOF > $MSG
+    cat << EOF > $MSG
 Please report this error to the admin.
 Checker exit with code $CHECKER_EXITCODE.
 Diff exit with code $DIFF_EXITCODE.
