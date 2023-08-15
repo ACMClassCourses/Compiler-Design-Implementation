@@ -6,7 +6,9 @@ make_input() {
     cp $1 $DIR/$2.in
 }
 make_output() {
-    grep "Verdict:" $1 | awk '{print $2}' > $DIR/$2.out
+    sed -n '/=== input ===/,/=== end ===/p' $1> $DIR/$2.out
+    sed -n '/=== output ===/,/=== end ===/p' $1 >> $DIR/$2.out
+    grep "ExitCode:" $1 >> $DIR/$2.out
 }
 
 mkdir -p $DIR
@@ -19,7 +21,7 @@ while read line; do
     make_output $line $count
 done < judgelist.txt
 
-cp oj/spj.cpp $DIR/spj.cpp
+cp oj/spj_bin $DIR/spj_bin
 
 # Make config
 
@@ -40,7 +42,7 @@ print_detail() {
     echo "        {" >> $DIR/config.json
     echo "            \"ID\": $1," >> $DIR/config.json
     echo "            \"Dependency\": 0," >> $DIR/config.json
-    echo "            \"TimeLimit\": 4000," >> $DIR/config.json
+    echo "            \"TimeLimit\": 10000," >> $DIR/config.json
     echo "            \"MemoryLimit\": 536870912," >> $DIR/config.json
     echo "            \"DiskLimit\": -536870912," >> $DIR/config.json
     echo "            \"FileNumberLimit\": 10," >> $DIR/config.json

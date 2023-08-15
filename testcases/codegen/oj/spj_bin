@@ -1,0 +1,69 @@
+#!/bin/bash
+
+INPUT=$1
+OUTPUT=$2
+ANSWER=$3
+SCORE=$4
+MSG=$5
+BIN=$6
+
+grep "runtime_error" $OUTPUT > /dev/null && \
+echo 0 > $SCORE && \
+echo "Runtime error" > $MSG && \
+exit 0
+
+sed -n '/=== input ===/,/=== end ===/{//!p}' $ANSWER > input.txt
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+sed -n '/=== output ===/,/=== end ===/{//!p}' $ANSWER > answer.txt
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
+
+if [ -f "$BIN/builtin.s" ]; then
+    BUILTIN="$BIN/builtin.s"
+fi
+
+ravel --input-file=input.txt --output-file=output.txt $OUTPUT $BUILTIN > ravel_output.txt
+RAVEL_EXITCODE=$?
+if [ $RAVEL_EXITCODE -ne 0 ]; then
+    echo 0 > $SCORE
+    echo "Ravel exit with code $RAVEL_EXITCODE" > $MSG
+    exit 0
+fi
+
+diff -qZB output.txt answer.txt > /dev/null 2>&1
+DIFF_EXITCODE=$?
+# Test the checker for OJ
+checker output.txt answer.txt > /dev/null 2>&1
+CHECKER_EXITCODE=$?
+
+if [ $DIFF_EXITCODE -ne $CHECKER_EXITCODE ]; then
+    echo 0 > $SCORE
+    echo << EOF > $MSG
+Please report this error to the admin.
+Checker exit with code $CHECKER_EXITCODE.
+Diff exit with code $DIFF_EXITCODE.
+EOF
+    exit 1
+fi
+
+HAS_PROBLEM=0
+if [ $DIFF_EXITCODE -ne 0 ]; then
+    HAS_PROBLEM=1
+    echo "Wrong answer." > $MSG
+fi
+EXIT_CODE=$(grep 'exit code' $OUTPUT | sed 's/exit code: //')
+if [ $EXIT_CODE -ne $EXPECTED_EXIT_CODE ]; then
+    HAS_PROBLEM=1
+    echo "Wrong exit code." > $MSG
+fi
+echo "Ravel output:" >> $MSG
+cat ravel_output.txt >> $MSG
+if [ $HAS_PROBLEM -eq 0 ]; then
+    echo 1 > $SCORE
+else
+    echo 0 > $SCORE
+fi
