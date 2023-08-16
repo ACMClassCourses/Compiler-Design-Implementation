@@ -69,5 +69,5 @@ done
 echo "    ]," >> $DIR/config.json
 echo "    \"CompileTimeLimit\": 120000," >> $DIR/config.json
 echo "    \"SPJ\": 1," >> $DIR/config.json
-echo "    \"CompilerStage\": \"-fsyntax-only\"" >> $DIR/config.json
+echo "    \"CompilerStage\": \"-S\"" >> $DIR/config.json
 echo "}" >> $DIR/config.json

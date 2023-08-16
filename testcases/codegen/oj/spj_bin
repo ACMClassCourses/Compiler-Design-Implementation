@@ -5,7 +5,7 @@ OUTPUT=$2
 ANSWER=$3
 SCORE=$4
 MSG=$5
-BIN=$6
+BIN=$6/bin
 
 grep "runtime_error" $OUTPUT > /dev/null && \
 echo 0 > $SCORE && \
@@ -30,7 +30,7 @@ ravel --input-file=input.txt --output-file=output.txt $OUTPUT $BUILTIN > ravel_o
 RAVEL_EXITCODE=$?
 if [ $RAVEL_EXITCODE -ne 0 ]; then
     echo 0 > $SCORE
-    echo "Ravel exit with code $RAVEL_EXITCODE" > $MSG
+    echo "Ravel exit with code $RAVEL_EXITCODE" >> $MSG
     cat ravel_error.txt >> $MSG
     exit 0
 fi
@@ -48,18 +48,18 @@ Please report this error to the admin.
 Checker exit with code $CHECKER_EXITCODE.
 Diff exit with code $DIFF_EXITCODE.
 EOF
-    exit 1
+    exit 0
 fi
 
 HAS_PROBLEM=0
 if [ $DIFF_EXITCODE -ne 0 ]; then
     HAS_PROBLEM=1
-    echo "Wrong answer." > $MSG
+    echo "Wrong answer." >> $MSG
 fi
 EXIT_CODE=$(grep 'exit code' ravel_output.txt | sed 's/exit code: //')
 if [ $EXIT_CODE -ne $EXPECTED_EXIT_CODE ]; then
     HAS_PROBLEM=1
-    echo "Wrong exit code." > $MSG
+    echo "Wrong exit code." >> $MSG
 fi
 echo "Ravel output:" >> $MSG
 cat ravel_output.txt >> $MSG
