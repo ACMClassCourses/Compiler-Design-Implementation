@@ -7,7 +7,7 @@
 # 1. Get an temporary directory
 # 2. Execute <compiler> < <testcase> > "$TEMPDIR/output.ll"
 # 3. Get the test.in and test.ans from <testcase> using sed
-# 4. Execute clang "$TEMPDIR/output.ll" "$3" -m32 -o "$TEMPDIR/exe"
+# 4. Execute llc -march=riscv32
 # 5. Execute "$TEMPDIR/exe" < "$TEMPDIR/test.in" > "$TEMPDIR/test.out"
 
 # Usage
@@ -33,25 +33,18 @@ if [ ! -f $3 ]; then
 fi
 source $(dirname $0)/utils.bash
 
-# Get the clang
-which clang-15 > /dev/null 2> /dev/null
-if [ $? -eq 0 ]; then
-    CLANG=clang-15
-else
-    which clang-16 > /dev/null 2> /dev/null
-    if [ $? -eq 0 ]; then
-        CLANG=clang-16
-    else
-        which clang-17 > /dev/null 2> /dev/null
-        if [ $? -eq 0 ]; then
-            CLANG=clang-17
-        else
-            test_bin clang
-            CLANG=clang
-            exit 1
-        fi
-    fi
-fi
+# Get the llc
+get_llc() {
+    (which llc > /dev/null 2> /dev/null && echo llc) || \
+    (which llc-15 > /dev/null 2> /dev/null && echo llc-15) || \
+    (which llc-16 > /dev/null 2> /dev/null && echo llc-16) || \
+    (which llc-17 > /dev/null 2> /dev/null && echo llc-17) || \
+    (which llc-18 > /dev/null 2> /dev/null && echo llc-18) || \
+    (which llc > /dev/null 2> /dev/null && echo llc)
+}
+LLC=$(get_llc)
+
+test_bin ravel
 
 # 1. Make temp directory
 if [ $# -eq 4 ]; then
@@ -105,16 +98,32 @@ fi
 EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
 
 # 4. Execute the code with clang
-$CLANG "$TEMPDIR/output.ll" "$3" -m32 -o "$TEMPDIR/exe" > /dev/null 2> /dev/null
+$LLC -march=riscv32 "$TEMPDIR/output.ll" -o "$TEMPDIR/output.s.source" > /dev/null 2> /dev/null
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile '$TEMPDIR/output.ll'." >&2
     print_temp_dir
     exit 1
 fi
+$LLC -march=riscv32 "$3" -o "$TEMPDIR/builtin.s.source" > /dev/null 2> /dev/null
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to compile '$TEMPDIR/builtin.ll'." >&2
+    print_temp_dir
+    exit 1
+fi
+remove_plt() {
+    sed 's/@plt$//g' $1 > $2
+}
+remove_plt "$TEMPDIR/output.s.source" "$TEMPDIR/output.s"
+remove_plt "$TEMPDIR/builtin.s.source" "$TEMPDIR/builtin.s"
 
 # 5. Execute the code
-"$TEMPDIR/exe" < "$TEMPDIR/test.in" > "$TEMPDIR/test.out" 2> /dev/null
-EXIT_CODE=$?
+ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/builtin.s" "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt" 2> /dev/null
+if [ $? -ne 0 ]; then
+    echo "Error: ravel exits with a non-zero value." >&2
+    print_temp_dir
+    exit 1
+fi
+
 HAS_PROBLEM=0
 diff -ZB "$TEMPDIR/test.out" "$TEMPDIR/test.ans" >&2
 if [ $? -ne 0 ]; then
@@ -122,6 +131,7 @@ if [ $? -ne 0 ]; then
     print_temp_dir
     HAS_PROBLEM=1
 fi
+EXIT_CODE=$(grep 'exit code' "$TEMPDIR/ravel_output.txt" | sed 's/exit code: //')
 if [ $EXIT_CODE -ne $EXPECTED_EXIT_CODE ]; then
     echo "Error: Exit code mismatch." >&2
     print_temp_dir
