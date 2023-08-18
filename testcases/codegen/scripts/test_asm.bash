@@ -54,16 +54,17 @@ clean() {
 }
 
 print_temp_dir() {
-    cat <<EOF >&2
+    cat << EOF >&2
 All generated files are at '$TEMPDIR'. You may check some files there.
 For example, you may check the output of your compiler at '$TEMPDIR/output.s'.
 Use the following command to clean up the temp directory:
-    rm -rf "$TEMPDIR"
+    rm -rf '$TEMPDIR'
 EOF
 }
 
 # 2. Compile the testcase
-$1 < $2 > "$TEMPDIR/output.s" 2> /dev/null
+echo "Compiling '$2' with your compiler..." >&2
+$1 < $2 > "$TEMPDIR/output.s"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile $2." >&2
     clean
@@ -88,7 +89,11 @@ EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
 # 4. Execute the code with ravel
 ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" $3 "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt" 2> /dev/null
 if [ $? -ne 0 ]; then
-    echo "Error: ravel exits with a non-zero value." >&2
+    cat << EOF >&2
+Error: Ravel exits with a non-zero value.
+You may run the following command again to see the error message:
+    ravel --input-file='$TEMPDIR/test.in' --output-file='$TEMPDIR/test.out' '$TEMPDIR/builtin.s' '$TEMPDIR/output.s'
+EOF
     print_temp_dir
     exit 1
 fi

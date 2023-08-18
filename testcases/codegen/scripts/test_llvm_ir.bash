@@ -10,6 +10,25 @@
 # 4. Execute llc -march=riscv32
 # 5. Execute "$TEMPDIR/exe" < "$TEMPDIR/test.in" > "$TEMPDIR/test.out"
 
+# Get the llc
+# LLVM makes a breaking change starting from LLVM 15, making opaque pointers
+# the default. We need to use the newer version of llc to compile the builtin
+# functions.
+# If you are using an old version of llc, you may need to change the following
+# code to use the correct version of llc. For example, if you are using LLVM 14,
+# you need to comment or delete the following lines in get_llc() and replace
+# them with 'echo llc-14'.
+# For maintainers: please update the following code when a new version of LLVM
+# is released.
+get_llc() {
+    (which llc-15 > /dev/null 2> /dev/null && echo llc-15) || \
+    (which llc-16 > /dev/null 2> /dev/null && echo llc-16) || \
+    (which llc-17 > /dev/null 2> /dev/null && echo llc-17) || \
+    (which llc-18 > /dev/null 2> /dev/null && echo llc-18) || \
+    (which llc > /dev/null 2> /dev/null && echo llc)
+}
+LLC=$(get_llc)
+
 # Usage
 if [ $# -ne 3 ] && [ $# -ne 4 ]; then
     cat << EOF >&2 
@@ -33,17 +52,6 @@ if [ ! -f $3 ]; then
 fi
 source $(dirname $0)/utils.bash
 
-# Get the llc
-get_llc() {
-    (which llc > /dev/null 2> /dev/null && echo llc) || \
-    (which llc-15 > /dev/null 2> /dev/null && echo llc-15) || \
-    (which llc-16 > /dev/null 2> /dev/null && echo llc-16) || \
-    (which llc-17 > /dev/null 2> /dev/null && echo llc-17) || \
-    (which llc-18 > /dev/null 2> /dev/null && echo llc-18) || \
-    (which llc > /dev/null 2> /dev/null && echo llc)
-}
-LLC=$(get_llc)
-
 test_bin ravel
 
 # 1. Make temp directory
@@ -66,16 +74,17 @@ clean() {
 }
 
 print_temp_dir() {
-    cat <<EOF >&2
+    cat << EOF >&2
 All generated files are at '$TEMPDIR'. You may check some files there.
 For example, you may check the output of your compiler at '$TEMPDIR/output.ll'.
 Use the following command to clean up the temp directory:
-    rm -rf "$TEMPDIR"
+    rm -rf '$TEMPDIR'
 EOF
 }
 
 # 2. Compile the testcase
-$1 < $2 > "$TEMPDIR/output.ll" 2> /dev/null
+echo "Compiling '$2' with your compiler..." >&2
+$1 < $2 > "$TEMPDIR/output.ll"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile $2." >&2
     clean
@@ -97,19 +106,22 @@ if [ $? -ne 0 ]; then
 fi
 EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
 
-# 4. Execute the code with clang
-$LLC -march=riscv32 "$TEMPDIR/output.ll" -o "$TEMPDIR/output.s.source" > /dev/null 2> /dev/null
+# 4. Execute the code with llc
+echo "Compling your output '$TEMPDIR/output.ll' with llc..." >&2
+$LLC -march=riscv32 "$TEMPDIR/output.ll" -o "$TEMPDIR/output.s.source" > /dev/null
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile '$TEMPDIR/output.ll'." >&2
     print_temp_dir
     exit 1
 fi
-$LLC -march=riscv32 "$3" -o "$TEMPDIR/builtin.s.source" > /dev/null 2> /dev/null
+echo "Compling your builtin '$3' with llc..." >&2
+$LLC -march=riscv32 "$3" -o "$TEMPDIR/builtin.s.source" > /dev/null
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile '$TEMPDIR/builtin.ll'." >&2
     print_temp_dir
     exit 1
 fi
+# remove the '@plt' suffix of the function name that is not supported by ravel
 remove_plt() {
     sed 's/@plt$//g' $1 > $2
 }
@@ -117,9 +129,14 @@ remove_plt "$TEMPDIR/output.s.source" "$TEMPDIR/output.s"
 remove_plt "$TEMPDIR/builtin.s.source" "$TEMPDIR/builtin.s"
 
 # 5. Execute the code
+echo "Executing the code..." >&2
 ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/builtin.s" "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt" 2> /dev/null
 if [ $? -ne 0 ]; then
-    echo "Error: ravel exits with a non-zero value." >&2
+    cat << EOF >&2
+Error: Ravel exits with a non-zero value.
+You may run the following command again to see the error message:
+    ravel --input-file='$TEMPDIR/test.in' --output-file='$TEMPDIR/test.out' '$TEMPDIR/builtin.s' '$TEMPDIR/output.s'
+EOF
     print_temp_dir
     exit 1
 fi
