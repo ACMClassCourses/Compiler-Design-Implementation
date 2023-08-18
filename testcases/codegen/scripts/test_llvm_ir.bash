@@ -20,14 +20,14 @@
 # them with 'echo llc-14'.
 # For maintainers: please update the following code when a new version of LLVM
 # is released.
-get_llc() {
-    (which llc-15 > /dev/null 2> /dev/null && echo llc-15) || \
-    (which llc-16 > /dev/null 2> /dev/null && echo llc-16) || \
-    (which llc-17 > /dev/null 2> /dev/null && echo llc-17) || \
-    (which llc-18 > /dev/null 2> /dev/null && echo llc-18) || \
-    (which llc > /dev/null 2> /dev/null && echo llc)
+get_clang() {
+    (which clang-15 > /dev/null 2> /dev/null && echo clang-15) || \
+    (which clang-16 > /dev/null 2> /dev/null && echo clang-16) || \
+    (which clang-17 > /dev/null 2> /dev/null && echo clang-17) || \
+    (which clang-18 > /dev/null 2> /dev/null && echo clang-18) || \
+    (which clang > /dev/null 2> /dev/null && echo clang)
 }
-LLC=$(get_llc)
+CLANG=$(get_clang)
 
 # Usage
 if [ $# -ne 3 ] && [ $# -ne 4 ]; then
@@ -107,15 +107,15 @@ fi
 EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
 
 # 4. Execute the code with llc
-echo "Compling your output '$TEMPDIR/output.ll' with llc..." >&2
-$LLC -march=riscv32 "$TEMPDIR/output.ll" -o "$TEMPDIR/output.s.source" > /dev/null
+echo "Compling your output '$TEMPDIR/output.ll' with clang..." >&2
+$CLANG -S --target=riscv32-unknown-elf "$TEMPDIR/output.ll" -o "$TEMPDIR/output.s.source" > /dev/null
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile '$TEMPDIR/output.ll'." >&2
     print_temp_dir
     exit 1
 fi
-echo "Compling your builtin '$3' with llc..." >&2
-$LLC -march=riscv32 "$3" -o "$TEMPDIR/builtin.s.source" > /dev/null
+echo "Compling your builtin '$3' with clang..." >&2
+$CLANG -S --target=riscv32-unknown-elf "$3" -o "$TEMPDIR/builtin.s.source" > /dev/null
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile '$TEMPDIR/builtin.ll'." >&2
     print_temp_dir
