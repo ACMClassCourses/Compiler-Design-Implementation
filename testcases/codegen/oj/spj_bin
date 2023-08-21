@@ -59,7 +59,7 @@ fi
 EXIT_CODE=$(grep 'exit code' ravel_output.txt | sed 's/exit code: //')
 if [ $EXIT_CODE -ne $EXPECTED_EXIT_CODE ]; then
     HAS_PROBLEM=1
-    echo "Wrong exit code." >> $MSG
+    echo "Wrong exit code. Expected: $EXPECTED_EXIT_CODE, yours: $EXIT_CODE." >> $MSG
 fi
 echo "Ravel output:" >> $MSG
 cat ravel_output.txt >> $MSG

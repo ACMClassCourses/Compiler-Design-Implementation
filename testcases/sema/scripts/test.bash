@@ -38,7 +38,7 @@ fail() {
     echo "Failed" >&2
     exit 1
 }
-$1 <$2 > /dev/null
+$1 < $2 > /dev/null
 RETURN_CODE=$?
 if [ $RETURN_CODE -ne 0 ]; then
     if [ $VERDICT -eq 0 ]; then

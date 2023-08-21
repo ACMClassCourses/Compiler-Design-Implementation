@@ -87,7 +87,7 @@ fi
 EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
 
 # 4. Execute the code with ravel
-ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" $3 "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt" 2> /dev/null
+ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" $3 "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt"
 if [ $? -ne 0 ]; then
     cat << EOF >&2
 Error: Ravel exits with a non-zero value.

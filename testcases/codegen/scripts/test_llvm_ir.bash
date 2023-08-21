@@ -7,8 +7,8 @@
 # 1. Get an temporary directory
 # 2. Execute <compiler> < <testcase> > "$TEMPDIR/output.ll"
 # 3. Get the test.in and test.ans from <testcase> using sed
-# 4. Execute llc -march=riscv32
-# 5. Execute "$TEMPDIR/exe" < "$TEMPDIR/test.in" > "$TEMPDIR/test.out"
+# 4. Execute clang -S --target=riscv32-unknown-elf
+# 5. Execute ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/builtin.s" "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt"
 
 # Get the llc
 # LLVM makes a breaking change starting from LLVM 15, making opaque pointers
@@ -106,16 +106,16 @@ if [ $? -ne 0 ]; then
 fi
 EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
 
-# 4. Execute the code with llc
+# 4. Execute the code with clang
 echo "Compling your output '$TEMPDIR/output.ll' with clang..." >&2
-$CLANG -S --target=riscv32-unknown-elf "$TEMPDIR/output.ll" -o "$TEMPDIR/output.s.source" > /dev/null
+$CLANG -S --target=riscv32-unknown-elf "$TEMPDIR/output.ll" -o "$TEMPDIR/output.s.source" >&2
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile '$TEMPDIR/output.ll'." >&2
     print_temp_dir
     exit 1
 fi
 echo "Compling your builtin '$3' with clang..." >&2
-$CLANG -S --target=riscv32-unknown-elf "$3" -o "$TEMPDIR/builtin.s.source" > /dev/null
+$CLANG -S --target=riscv32-unknown-elf "$3" -o "$TEMPDIR/builtin.s.source" >&2
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile '$TEMPDIR/builtin.ll'." >&2
     print_temp_dir
@@ -130,7 +130,7 @@ remove_plt "$TEMPDIR/builtin.s.source" "$TEMPDIR/builtin.s"
 
 # 5. Execute the code
 echo "Executing the code..." >&2
-ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/builtin.s" "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt" 2> /dev/null
+ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/builtin.s" "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt"
 if [ $? -ne 0 ]; then
     cat << EOF >&2
 Error: Ravel exits with a non-zero value.
