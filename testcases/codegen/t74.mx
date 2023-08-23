@@ -17,7 +17,7 @@ ExitCode: 0
 InstLimit: -1
 */
 
-int test() {
+void test() {
     int a = getInt();
     printlnInt(a / 2);
 }
