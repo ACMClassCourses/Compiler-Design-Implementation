@@ -10,13 +10,15 @@
 # 4. Execute clang -S --target=riscv32-unknown-elf
 # 5. Execute ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/builtin.s" "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt"
 
-# Get the llc
+# NOTE: You should have ravel installed in your system.
+
+# Get the clang
 # LLVM makes a breaking change starting from LLVM 15, making opaque pointers
 # the default. We need to use the newer version of llc to compile the builtin
 # functions.
 # If you are using an old version of llc, you may need to change the following
 # code to use the correct version of llc. For example, if you are using LLVM 14,
-# you need to comment or delete the following lines in get_llc() and replace
+# you need to comment or delete the following lines in get_clang() and replace
 # them with 'echo llc-14'.
 # For maintainers: please update the following code when a new version of LLVM
 # is released.
@@ -25,7 +27,8 @@ get_clang() {
     (which clang-16 > /dev/null 2> /dev/null && echo clang-16) || \
     (which clang-17 > /dev/null 2> /dev/null && echo clang-17) || \
     (which clang-18 > /dev/null 2> /dev/null && echo clang-18) || \
-    (which clang > /dev/null 2> /dev/null && echo clang)
+    (which clang > /dev/null 2> /dev/null && echo clang) || \
+    (echo "clang not found" >&2 && exit 1)
 }
 CLANG=$(get_clang)
 
@@ -41,13 +44,16 @@ EOF
     exit 1
 fi
 
+COMPILER=$1
+TESTCASE=$2
+BUILTIN=$3
 
-if [ ! -f $2 ]; then
-    echo "Error: testcase file $2 does not exist." >&2
+if [ ! -f $TESTCASE ]; then
+    echo "Error: testcase file $TESTCASE does not exist." >&2
     exit 1
 fi
-if [ ! -f $3 ]; then
-    echo "Error: builtin file $3 does not exist." >&2
+if [ ! -f $BUILTIN ]; then
+    echo "Error: builtin file $BUILTIN does not exist." >&2
     exit 1
 fi
 source $(dirname $0)/utils.bash
@@ -57,11 +63,15 @@ test_bin ravel
 # 1. Make temp directory
 if [ $# -eq 4 ]; then
     TEMPDIR=$4
+    if [ ! -d $TEMPDIR ]; then
+        echo "Error: temp directory $TEMPDIR does not exist." >&2
+        exit 1
+    fi
     USER_DEFINED_TEMPDIR=1
 else
     TEMPDIR="$(mktemp -d -p /tmp mxc.XXXXXXXXXX)"
     USER_DEFINED_TEMPDIR=0
-    if [ $? -ne 0 ]; then
+    if [ ! -d $TEMPDIR ]; then
         echo "Error: Failed to create temp directory." >&2
         exit 1
     fi
@@ -83,24 +93,24 @@ EOF
 }
 
 # 2. Compile the testcase
-echo "Compiling '$2' with your compiler..." >&2
-$1 < $2 > "$TEMPDIR/output.ll"
+echo "Compiling '$TESTCASE' with your compiler..." >&2
+$COMPILER < $TESTCASE > "$TEMPDIR/output.ll"
 if [ $? -ne 0 ]; then
-    echo "Error: Failed to compile $2." >&2
+    echo "Error: Failed to compile $TESTCASE." >&2
     clean
     exit 1
 fi
 
 # 3. Get the test.in and test.ans from <testcase> using sed
-sed -n '/=== input ===/,/=== end ===/{//!p}' $2 > "$TEMPDIR/test.in"
+sed -n '/=== input ===/,/=== end ===/{//!p}' $TESTCASE > "$TEMPDIR/test.in"
 if [ $? -ne 0 ]; then
-    echo "Error: Failed to get input from $2." >&2
+    echo "Error: Failed to get input from $TESTCASE." >&2
     clean
     exit 1
 fi
-sed -n '/=== output ===/,/=== end ===/{//!p}' $2 > "$TEMPDIR/test.ans"
+sed -n '/=== output ===/,/=== end ===/{//!p}' $TESTCASE > "$TEMPDIR/test.ans"
 if [ $? -ne 0 ]; then
-    echo "Error: Failed to get output from $2." >&2
+    echo "Error: Failed to get output from $TESTCASE." >&2
     clean
     exit 1
 fi
@@ -114,8 +124,8 @@ if [ $? -ne 0 ]; then
     print_temp_dir
     exit 1
 fi
-echo "Compling your builtin '$3' with clang..." >&2
-$CLANG -S --target=riscv32-unknown-elf "$3" -o "$TEMPDIR/builtin.s.source" >&2
+echo "Compling your builtin '$BUILTIN' with clang..." >&2
+$CLANG -S --target=riscv32-unknown-elf "$BUILTIN" -o "$TEMPDIR/builtin.s.source" >&2
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile '$TEMPDIR/builtin.ll'." >&2
     print_temp_dir
@@ -148,7 +158,7 @@ if [ $? -ne 0 ]; then
     print_temp_dir
     HAS_PROBLEM=1
 fi
-EXIT_CODE=$(grep 'exit code' "$TEMPDIR/ravel_output.txt" | sed 's/exit code: //')
+EXIT_CODE=$(grep 'exit code' "$TEMPDIR/ravel_output.txt" | awk '{print $3}')
 if [ $EXIT_CODE -ne $EXPECTED_EXIT_CODE ]; then
     echo "Error: Exit code mismatch." >&2
     print_temp_dir

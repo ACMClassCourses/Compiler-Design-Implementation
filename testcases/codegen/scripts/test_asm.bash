@@ -21,12 +21,16 @@ EOF
     exit 1
 fi
 
-if [ ! -f $2 ]; then
-    echo "Error: testcase file $2 does not exist." >&2
+COMPILER=$1
+TESTCASE=$2
+BUILTIN=$3
+
+if [ ! -f $TESTCASE ]; then
+    echo "Error: testcase file $TESTCASE does not exist." >&2
     exit 1
 fi
-if [ ! -f $3 ]; then
-    echo "Error: builtin file $3 does not exist." >&2
+if [ ! -f $BUILTIN ]; then
+    echo "Error: builtin file $BUILTIN does not exist." >&2
     exit 1
 fi
 source $(dirname $0)/utils.bash
@@ -63,31 +67,31 @@ EOF
 }
 
 # 2. Compile the testcase
-echo "Compiling '$2' with your compiler..." >&2
-$1 < $2 > "$TEMPDIR/output.s"
+echo "Compiling '$TESTCASE' with your compiler..." >&2
+$COMPILER < $TESTCASE > "$TEMPDIR/output.s"
 if [ $? -ne 0 ]; then
-    echo "Error: Failed to compile $2." >&2
+    echo "Error: Failed to compile $TESTCASE." >&2
     clean
     exit 1
 fi
 
 # 3. Get the test.in and test.ans from <testcase> using sed
-sed -n '/=== input ===/,/=== end ===/{//!p}' $2 > "$TEMPDIR/test.in"
+sed -n '/=== input ===/,/=== end ===/{//!p}' $TESTCASE > "$TEMPDIR/test.in"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to get input from $2." >&2
     clean
     exit 1
 fi
-sed -n '/=== output ===/,/=== end ===/{//!p}' $2 > "$TEMPDIR/test.ans"
+sed -n '/=== output ===/,/=== end ===/{//!p}' $TESTCASE > "$TEMPDIR/test.ans"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to get output from $2." >&2
     clean
     exit 1
 fi
-EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
+EXPECTED_EXIT_CODE=$(grep "ExitCode:" $TESTCASE | awk '{print $2}')
 
 # 4. Execute the code with ravel
-ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" $3 "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt"
+ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" $BUILTIN "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt"
 if [ $? -ne 0 ]; then
     cat << EOF >&2
 Error: Ravel exits with a non-zero value.
@@ -105,7 +109,7 @@ if [ $? -ne 0 ]; then
     print_temp_dir
     HAS_PROBLEM=1
 fi
-EXIT_CODE=$(grep 'exit code' "$TEMPDIR/ravel_output.txt" | sed 's/exit code: //')
+EXIT_CODE=$(grep 'exit code' "$TEMPDIR/ravel_output.txt" | awk '{print $3}')
 if [ $EXIT_CODE -ne $EXPECTED_EXIT_CODE ]; then
     echo "Error: Exit code mismatch." >&2
     print_temp_dir
