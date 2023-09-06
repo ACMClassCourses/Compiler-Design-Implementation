@@ -9,6 +9,7 @@
 # 3. Get the test.in and test.ans from <testcase> using sed
 # 4. Execute clang -S --target=riscv32-unknown-elf
 # 5. Execute ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/builtin.s" "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt"
+# 6. Compare the output and exit code
 
 # NOTE: You should have ravel installed in your system.
 
@@ -44,10 +45,12 @@ EOF
     exit 1
 fi
 
+# Set variables
 COMPILER=$1
 TESTCASE=$2
 BUILTIN=$3
 
+# Test whether the testcase file and builtin file exist or not
 if [ ! -f $TESTCASE ]; then
     echo "Error: testcase file $TESTCASE does not exist." >&2
     exit 1
@@ -58,6 +61,12 @@ if [ ! -f $BUILTIN ]; then
 fi
 source $(dirname $0)/utils.bash
 
+# Test whether ravel is installed
+# If not installed, please follow the document at
+# <https://github.com/Engineev/ravel>.
+# Note: If you just follow the steps in the README, you need to put the last
+# line (export PATH="/usr/local/opt/bin:$PATH") in your .bashrc or .zshrc
+# (depending on which shell you are using).
 test_bin ravel
 
 # 1. Make temp directory
@@ -77,12 +86,15 @@ else
     fi
 fi
 
+# clean cleans up the temp directory
 clean() {
     if [ $USER_DEFINED_TEMPDIR -eq 0 ]; then
         rm -rf "$TEMPDIR"
     fi
 }
 
+# print_temp_dir prints the temp directory
+# This function is used when the test fails
 print_temp_dir() {
     cat << EOF >&2
 All generated files are at '$TEMPDIR'. You may check some files there.
@@ -92,7 +104,7 @@ Use the following command to clean up the temp directory:
 EOF
 }
 
-# 2. Compile the testcase
+# 2. Compile the testcase with your compiler
 echo "Compiling '$TESTCASE' with your compiler..." >&2
 $COMPILER < $TESTCASE > "$TEMPDIR/output.ll"
 if [ $? -ne 0 ]; then
@@ -116,7 +128,7 @@ if [ $? -ne 0 ]; then
 fi
 EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
 
-# 4. Execute the code with clang
+# 4. Compile the LLVM IR code with clang into RISC-V assembly
 echo "Compling your output '$TEMPDIR/output.ll' with clang..." >&2
 $CLANG -S --target=riscv32-unknown-elf "$TEMPDIR/output.ll" -o "$TEMPDIR/output.s.source" >&2
 if [ $? -ne 0 ]; then
@@ -151,6 +163,7 @@ EOF
     exit 1
 fi
 
+# 6. Compare the output and exit code
 HAS_PROBLEM=0
 diff -ZB "$TEMPDIR/test.out" "$TEMPDIR/test.ans" >&2
 if [ $? -ne 0 ]; then
