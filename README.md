@@ -63,7 +63,20 @@
 - [三、编译说明](#三编译说明)
     - [1. 程序输入输出](#1-程序输入输出)
     - [2. 评测指标和基准线的划分](#2-评测指标和基准线的划分)
-    - [3. FAQ](#3-faq)
+    - [3. 本地测试](#3-本地测试)
+        - [3.1 测试 Semantic](#31-测试-semantic)
+            - [3.1.1 单点 Semantic 测试](#311-单点-semantic-测试)
+            - [3.1.2 全部 Semantic 测试](#312-全部-semantic-测试)
+            - [3.1.3 本地测试例子](#313-本地测试例子)
+        - [3.2 测试 LLVM IR](#32-测试-llvm-ir)
+            - [3.2.1 单点 LLVM IR 测试](#321-单点-llvm-ir-测试)
+            - [3.2.2 全部 LLVM IR 测试](#322-全部-llvm-ir-测试)
+            - [3.2.3 本地测试例子](#323-本地测试例子)
+        - [3.3 测试汇编](#33-测试汇编)
+            - [3.3.1 单点汇编测试](#331-单点汇编测试)
+            - [3.3.2 全部汇编测试](#332-全部汇编测试)
+            - [3.3.3 本地测试例子](#333-本地测试例子)
+- [四、FAQ](#四faq)
 - [Document Note](#document-note)
 
 <!-- /TOC -->
@@ -98,9 +111,11 @@
 
 ### 4. 其他说明
 
-1. **关于服务器**：服务器可能有漏洞，如果可以提供对服务器封堵漏洞的好的建议是十分欢迎的。在不通知负责助教的情况下，任何对服务器的破坏性行为会导致请喝茶以及支付由此产生的额外服务器维护费用
+1. **关于服务器**：服务器可能有漏洞，如果可以提供对服务器封堵漏洞的好的建议是十分欢迎的。在不通知负责助教的情况下，任何对服务器的破坏性行为会导致请喝茶以及支付由此产生的额外服务器维护费用。
 
 2. **关于本文档**：本文档参照 ISO/IEC 14882:2017 Programming Language C++ 以及往年的 Manual 做出修改。如果对数据或文档有疑问或者认为数据或文档存在错误的，请发起 Issue。如果发现有可修复的错误可以直接发起 Pull Requests，十分感谢！
+
+3. **关于测试脚本**：testcase 目录的 sema 和 codegen 下分别有 semantic 和 codegen 的测试脚本。使用方法参见[本地测试部分](#3-本地测试)。
 
 ## 二、Mx* 语言定义
 
@@ -737,6 +752,8 @@ gcc构筑命令：`./configure --prefix=/opt/riscv --with-arch=rv32ima --with-ab
 2. 编译目标代码 / Compile target code: 使用构建的编译器编译 Mx* 语言，如果编译正确输出目标汇编代码，反之编译器应当以非0返回值退出。
 3. 执行目标代码 / Execute target code: 使用模拟器运行你的代码的过程。（模拟器地址： <https://github.com/Engineev/ravel>）
 
+关于模拟器 ravel，如果你不想每次都输入 `export PATH="/usr/local/opt/bin:$PATH"`，你需要将其放到对应 shell 的配置文件，如 bash 用户请放到 `.bashrc` 中，zsh 用户请放到 `.zshrc` 中。
+
 ### 2. 评测指标和基准线的划分
 
 **评测指标**：时间、准确性
@@ -744,7 +761,194 @@ gcc构筑命令：`./configure --prefix=/opt/riscv --with-arch=rv32ima --with-ab
 1. 时间：采用模拟器运行，计算准确的周期数作为程序运行时间。对于同一个 Commit 不会重复评测。
 2. 准确性：给定输入的情况下，评测输出和程序返回值是否和标准相同。评测输出**不会去除行末空格换行符，也不会去除文末换行符**
 
-### 3. FAQ
+### 3. 本地测试
+
+*注：本地测试结果仅供参考，具体结果请以线上评测结果为准。*
+
+#### 3.1 测试 Semantic
+
+基本要求：Semantic 测试中，你的编译器需要对标准输入流的 Mx* 代码进行语法检查，如果语法正确则返回 0，否则返回非 0。
+
+##### 3.1.1 单点 Semantic 测试
+
+你可以执行以下命令来对单个测试点进行测试：
+
+```sh
+path/to/test.bash <your_compiler_and_args> <testcase>
+```
+
+- `path/to/test.bash` 是本 repo 中的 `testcases/sema/scripts/test.bash` 脚本的路径；
+- `<your_compiler_and_args>` 是你的编译器的执行命令；
+- `<testcase>` 是测试样例的路径。
+
+
+##### 3.1.2 全部 Semantic 测试
+
+你可以执行以下命令来对全部测试点进行测试：（此测试中，有一部分信息将会隐去，因此如果遇到问题，建议用单个测试点重新测试）
+
+```sh
+path/to/test_all.bash <your_compiler_and_args> <testcase_dir>
+```
+
+- `path/to/test_all.bash` 是本 repo 中的 `testcases/sema/scripts/test_all.bash` 脚本的路径；
+- `<your_compiler_and_args>` 是你的编译器的执行命令；
+- `<testcase_dir>` 是测试样例的路径（对应本 repo 中的 `testcases/sema/` 目录）。
+
+##### 3.1.3 本地测试例子
+
+假设:
+1. 你使用 Java 编写程序，源代码位于 `src/` 目录下，
+2. 你的编译器在 `-fsyntax-only` 参数下可以检查标准输入流的语法，
+3. 测试样例位于 `testcase/` 目录下，
+4. 你的主类是 `Compiler`，（如不是，请将下文的 `Compiler` 替换为你的主类名）
+5. 你的编译器的 jar 包位于 `/usr/share/java/antlr-4.13.0-complete.jar`，（如不是，请替换为你的 jar 包路径）
+
+则你需要先行编译你的编译器：
+
+```sh
+find src -name '*.java' | xargs javac -d bin -cp /usr/share/java/antlr-4.13.0-complete.jar
+```
+
+你可以使用以下命令测试程序 `testcases/sema/array-package/array-1.mx`：
+
+```sh
+testcases/sema/scripts/test.bash 'java -cp /usr/share/java/antlr-runtime-4.13.0.jar:bin Compiler -fsyntax-only' testcases/sema/array-package/array-1.mx
+```
+
+你可以使用以下命令测试 `testcases/sema/` 目录下的所有测试点：
+
+```sh
+testcases/sema/scripts/test_all.bash 'java -cp /usr/share/java/antlr-runtime-4.13.0.jar:bin Compiler -fsyntax-only' testcases/sema/
+```
+
+#### 3.2 测试 LLVM IR
+
+*虽然我们不强制要求使用 LLVM IR 作为中间语言，但是我们提供了 LLVM IR 的测试脚本，供同学们参考。*
+
+基本要求：LLVM IR 测试中，你的编译器需要将 Mx* 代码编译为 LLVM IR，你需要在特定的参数下将编译器的标准输入流转化为 LLVM IR，并输出到标准输出流中。
+然后测试脚本会将你生成的 LLVM IR 代码用 `clang -S --target=riscv32-unknown-elf` 参数编译为 RISC-V 汇编代码，然后使用 `ravel` 运行你的代码。
+生成的汇编连带你的内建汇编（也会由 `clang` 编译）运行后的输出与返回值需要和测试点要求的一致。
+
+**请务必确保 `ravel` 命令存在并且是本作业要求的模拟器平台。**
+
+##### 3.2.1 单点 LLVM IR 测试
+
+你可以执行以下命令来对单个测试点进行测试：
+
+```sh
+path/to/test_llvm_ir.bash <your_compiler_and_args> <testcase> [builtin] [temp_dir]
+```
+
+- `path/to/test_llvm_ir.bash` 是本 repo 中的 `testcases/codegen/scripts/test.bash` 脚本的路径；
+- `<your_compiler_and_args>` 是你的编译器的执行命令；
+- `<testcase>` 是测试样例的路径；
+- `[builtin]` 是你的编译器的内建函数的路径，此参数可省略；
+- `[temp_dir]` 是临时文件夹的路径，用于存放生成的临时文件，此参数可省略，但如果没有省略此参数，请务必保证该目录存在；
+- 如果除了脚本外有三个参数，则脚本将会检查第三个参数是否为文件，如果是，则认为其为 `[builtin]`，否则认为是 `[tempdir]`。
+
+##### 3.2.2 全部 LLVM IR 测试
+
+你可以执行以下命令来对全部测试点进行测试：（此测试中，有一部分信息将会隐去，因此如果遇到问题，建议用单个测试点重新测试）
+
+```sh
+path/to/test_llvm_ir_all.bash <your_compiler_and_args> <testcase_dir> [builtin]
+```
+
+- `path/to/test_llvm_ir_all.bash` 是本 repo 中的 `testcases/codegen/scripts/test_all.bash` 脚本的路径；
+- `<your_compiler_and_args>` 是你的编译器的执行命令；
+- `<testcase_dir>` 是测试样例的路径（对应本 repo 中的 `testcases/codegen/` 目录）；
+- `[builtin]` 是你的编译器的内建 LLVM IR 函数的路径，此参数可省略。
+
+##### 3.2.3 本地测试例子
+
+假设:
+1. 你使用 Java 编写程序，源代码位于 `src/` 目录下，
+2. 你的编译器在 `-emit-llvm` 参数下可以将标准输入流转化为 LLVM IR，
+3. 测试样例位于 `testcase/` 目录下，
+4. 你的主类是 `Compiler`，（如不是，请将下文的 `Compiler` 替换为你的主类名）
+5. 你的编译器的 jar 包位于 `/usr/share/java/antlr-4.13.0-complete.jar`，（如不是，请替换为你的 jar 包路径）
+6. 你的内建函数代码为 `bin/builtin.ll`，（如不是，请替换为你的内建函数路径；如没有，请在后文中忽略所有出现的 `bin/builtin.ll`）
+
+则你需要先行编译你的编译器：
+
+```sh
+find src -name '*.java' | xargs javac -d bin -cp /usr/share/java/antlr-4.13.0-complete.jar
+```
+
+你可以使用以下命令测试程序 `testcases/codegen/t1.mx`：
+
+```sh
+testcases/codegen/scripts/test.bash 'java -cp /usr/share/java/antlr-runtime-4.13.0.jar:bin Compiler -emit-llvm' testcases/codegen/t1.mx bin/builtin.ll
+```
+
+你可以使用以下命令测试 `testcases/codegen/` 目录下的所有测试点：
+
+```sh
+testcases/codegen/scripts/test_all.bash 'java -cp /usr/share/java/antlr-runtime-4.13.0.jar:bin Compiler -emit-llvm' testcases/codegen/ bin/builtin.ll
+```
+
+#### 3.3 测试汇编
+
+基本要求：汇编测试中，你的编译器需要将 Mx* 代码编译为汇编代码，你需要在特定的参数下将编译器的标准输入流转化为汇编代码，并输出到标准输出流中。
+你的汇编连同你的内建汇编（也会由 `clang` 编译）将会使用 `ravel` 运行，运行后的输出与返回值需要和测试点要求的一致。
+
+##### 3.3.1 单点汇编测试
+
+你可以执行以下命令来对单个测试点进行测试：
+
+```sh
+path/to/test_asm.bash <your_compiler_and_args> <testcase> [builtin] [temp_dir]
+```
+
+- `path/to/test_asm.bash` 是本 repo 中的 `testcases/codegen/scripts/test.bash` 脚本的路径；
+- `<your_compiler_and_args>` 是你的编译器的执行命令；
+- `<testcase>` 是测试样例的路径；
+- `[builtin]` 是你的编译器的内建函数的路径，此参数可省略；
+- `[temp_dir]` 是临时文件夹的路径，用于存放生成的临时文件，此参数可省略，但如果没有省略此参数，请务必保证该目录存在；
+- 如果除了脚本外有三个参数，则脚本将会检查第三个参数是否为文件，如果是，则认为其为 `[builtin]`，否则认为是 `[tempdir]`。
+
+##### 3.3.2 全部汇编测试
+
+你可以执行以下命令来对全部测试点进行测试：（此测试中，有一部分信息将会隐去，因此如果遇到问题，建议用单个测试点重新测试）
+
+```sh
+path/to/test_asm_all.bash <your_compiler_and_args> <testcase_dir> [builtin]
+```
+
+- `path/to/test_asm_all.bash` 是本 repo 中的 `testcases/codegen/scripts/test_all.bash` 脚本的路径；
+- `<your_compiler_and_args>` 是你的编译器的执行命令；
+- `<testcase_dir>` 是测试样例的路径（对应本 repo 中的 `testcases/codegen/` 目录）；
+- `[builtin]` 是你的编译器的内建汇编函数的路径，此参数可省略。
+
+##### 3.3.3 本地测试例子
+
+假设:
+1. 你使用 Java 编写程序，源代码位于 `src/` 目录下，
+2. 你的编译器在 `-S` 参数下可以将标准输入流转化为汇编代码，
+3. 测试样例位于 `testcase/` 目录下，
+4. 你的主类是 `Compiler`，（如不是，请将下文的 `Compiler` 替换为你的主类名）
+5. 你的编译器的 jar 包位于 `/usr/share/java/antlr-4.13.0-complete.jar`，（如不是，请替换为你的 jar 包路径）
+6. 你的内建函数代码为 `bin/builtin.s`，（如不是，请替换为你的内建函数路径；如没有，请在后文中忽略所有出现的 `bin/builtin.s`）
+
+则你需要先行编译你的编译器：
+
+```sh
+find src -name '*.java' | xargs javac -d bin -cp /usr/share/java/antlr-4.13.0-complete.jar
+```
+
+你可以使用以下命令测试程序 `testcases/codegen/t1.mx`：
+
+```sh
+testcases/codegen/scripts/test.bash 'java -cp /usr/share/java/antlr-runtime-4.13.0.jar:bin Compiler -S' testcases/codegen/t1.mx bin/builtin.s
+```
+
+你可以使用以下命令测试 `testcases/codegen/` 目录下的所有测试点：
+
+```sh
+testcases/codegen/scripts/test_all.bash 'java -cp /usr/share/java/antlr-runtime-4.13.0.jar:bin Compiler -S' testcases/codegen/ bin/builtin.s
+```
+
+## 四、FAQ
 
 有任何问题请在这个 Repo 直接发起 Issue，对语言规则有疑问的使用 Question 标签，发现编译器评测的 bug 的使用 Bug 标签，对测试集的问题/发现测试集重的 bug 的使用 benchmark and data/benchmark-URGENT 标签。
 
