@@ -1,6 +1,10 @@
 #!/bin/bash
 
-# Usage: scripts/test.bash <compiler> <testcase> <builtin> [tempdir]
+# Usage: scripts/test.bash <compiler> <testcase> [builtin] [tempdir]
+# The builtin and tempdir are optional. If there are three arguments, the
+# script will check whether the third argument is a file. If it is a file,
+# then it will be treated as the builtin file. Otherwise, it will be treated
+# as the tempdir.
 # Example:
 #     scripts/test.bash 'bin/mxc -emit-llvm' testcases/codegen/t1.mx bin/builtin.ll
 # The script will
@@ -36,7 +40,11 @@ CLANG=$(get_clang)
 # Usage
 if [ $# -ne 3 ] && [ $# -ne 4 ]; then
     cat << EOF >&2 
-Usage: $0 <complier> <testcase> <builtin> [tempdir]
+Usage: $0 <complier> <testcase> [builtin] [tempdir]
+       The builtin and tempdir are optional. If there are three arguments, the
+       script will check whether the third argument is a file. If it is a file,
+       then it will be treated as the builtin file. Otherwise, it will be
+       treated as the tempdir.
        If you need to pass arguments to the compiler, please use
        quotation mark(') to pack the arguments along with the compiler
        command. For example,
@@ -48,15 +56,10 @@ fi
 # Set variables
 COMPILER=$1
 TESTCASE=$2
-BUILTIN=$3
 
 # Test whether the testcase file and builtin file exist or not
 if [ ! -f $TESTCASE ]; then
     echo "Error: testcase file $TESTCASE does not exist." >&2
-    exit 1
-fi
-if [ ! -f $BUILTIN ]; then
-    echo "Error: builtin file $BUILTIN does not exist." >&2
     exit 1
 fi
 source $(dirname $0)/utils.bash
@@ -71,19 +74,36 @@ test_bin ravel
 
 # 1. Make temp directory
 if [ $# -eq 4 ]; then
+    HAS_BUILTIN=1
+    BUILTIN=$3
     TEMPDIR=$4
-    if [ ! -d $TEMPDIR ]; then
-        echo "Error: temp directory $TEMPDIR does not exist." >&2
-        exit 1
-    fi
     USER_DEFINED_TEMPDIR=1
+elif [ $# -eq 3 ]; then
+    if [ ! -f $3 ]; then
+        HAS_BUILTIN=0
+        TEMPDIR=$3
+    else
+        HAS_BUILTIN=1
+        BUILTIN=$3
+        USER_DEFINED_TEMPDIR=0
+        TEMPDIR="$(mktemp -d -p /tmp mxc.XXXXXXXXXX)"
+        if [ $? -ne 0 ]; then
+            echo "Error: Failed to create temp directory." >&2
+            exit 1
+        fi
+    fi
 else
-    TEMPDIR="$(mktemp -d -p /tmp mxc.XXXXXXXXXX)"
+    HAS_BUILTIN=0
     USER_DEFINED_TEMPDIR=0
-    if [ ! -d $TEMPDIR ]; then
+    TEMPDIR="$(mktemp -d -p /tmp mxc.XXXXXXXXXX)"
+    if [ $? -ne 0 ]; then
         echo "Error: Failed to create temp directory." >&2
         exit 1
     fi
+fi
+if [ ! -d $TEMPDIR ]; then
+    echo "Error: temp directory not exists." >&2
+    exit 1
 fi
 
 # clean cleans up the temp directory
@@ -136,26 +156,36 @@ if [ $? -ne 0 ]; then
     print_temp_dir
     exit 1
 fi
-echo "Compling your builtin '$BUILTIN' with clang..." >&2
-$CLANG -S --target=riscv32-unknown-elf "$BUILTIN" -o "$TEMPDIR/builtin.s.source" >&2
-if [ $? -ne 0 ]; then
-    echo "Error: Failed to compile '$TEMPDIR/builtin.ll'." >&2
-    print_temp_dir
-    exit 1
+if [ $HAS_BUILTIN -eq 1 ]; then
+    echo "Compling your builtin '$BUILTIN' with clang..." >&2
+    $CLANG -S --target=riscv32-unknown-elf "$BUILTIN" -o "$TEMPDIR/builtin.s.source" >&2
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to compile '$TEMPDIR/builtin.ll'." >&2
+        print_temp_dir
+        exit 1
+    fi
 fi
 # remove the '@plt' suffix of the function name that is not supported by ravel
 remove_plt() {
     sed 's/@plt$//g' $1 > $2
 }
 remove_plt "$TEMPDIR/output.s.source" "$TEMPDIR/output.s"
-remove_plt "$TEMPDIR/builtin.s.source" "$TEMPDIR/builtin.s"
+if [ $HAS_BUILTIN -eq 1 ]; then
+    remove_plt "$TEMPDIR/builtin.s.source" "$TEMPDIR/builtin.s"
+fi
 
 # 5. Execute the code
 echo "Executing the code..." >&2
-ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/builtin.s" "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt"
-if [ $? -ne 0 ]; then
+if [ $HAS_BUILTIN -eq 1 ]; then
+    ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/builtin.s" "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt"
+    RAVEL_EXIT_CODE=$?
+else
+    ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/output.s" > "$TEMPDIR/ravel_output.txt"
+    RAVEL_EXIT_CODE=$?
+fi
+if [ $RAVEL_EXIT_CODE -ne 0 ]; then
     cat << EOF >&2
-Error: Ravel exits with a non-zero value.
+Error: Ravel exits with a non-zero value $RAVEL_EXIT_CODE.
 You may run the following command again to see the error message:
     ravel --input-file='$TEMPDIR/test.in' --output-file='$TEMPDIR/test.out' '$TEMPDIR/builtin.s' '$TEMPDIR/output.s'
 EOF

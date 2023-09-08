@@ -1,12 +1,14 @@
 #!/bin/bash
 
-# Usage: scripts/test.bash <compiler> <codegen_dir> <builtin>
+# Usage: scripts/test.bash <compiler> <codegen_dir> [builtin]
+# The builtin is optional.
 # Example:
 #    scripts/test.bash 'bin/mxc -emit-llvm' ./testcases/codegen bin/builtin.ll
 
 if [ $# -ne 3 ]; then
     cat << EOF >&2 
-Usage: $0 <complier> <codegen_dir> <builtin>
+Usage: $0 <complier> <codegen_dir> [builtin]
+       The builtin is optional.
        If you need to pass arguments to the compiler, please use
        quotation mark(') to pack the arguments along with the compiler
        command. For example,
@@ -19,16 +21,18 @@ if [ ! -d $2 ]; then
     echo "Error: codegen_dir $2 does not exist." >&2
     exit 1
 fi
-if [ ! -f $3 ]; then
-    echo "Error: builtin file $3 does not exist." >&2
-    exit 1
+if [ $# -eq 3 ]; then
+    if [ ! -f $3 ]; then
+        echo "Error: builtin file $3 does not exist." >&2
+        exit 1
+    fi
+    BUILTIN=$3
 fi
 
 source $(dirname $0)/utils.bash
 
 COMPILER=$1
 CODEGEN_DIR=$2
-BUILTIN=$3
 if [ ${CODEGEN_DIR:0:1} != "/" ]; then
     CODEGEN_DIR="$CODEGEN_DIR/"
 fi
@@ -67,7 +71,7 @@ wrong_count=0
 total_count=0
 while read line; do
     (( total_count += 1 ))
-    judge_one_testcase $CODEGEN_DIR$line $line
+    judge_one_testcase "$CODEGEN_DIR$line" $line
     if [ $? -ne 0 ]; then
         (( wrong_count += 1 ))
     fi
