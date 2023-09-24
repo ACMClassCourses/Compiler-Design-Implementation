@@ -184,11 +184,19 @@ else
     RAVEL_EXIT_CODE=$?
 fi
 if [ $RAVEL_EXIT_CODE -ne 0 ]; then
-    cat << EOF >&2
+    if [ $HAS_BUILTIN -eq 1 ]; then
+        cat << EOF >&2
 Error: Ravel exits with a non-zero value $RAVEL_EXIT_CODE.
 You may run the following command again to see the error message:
     ravel --input-file='$TEMPDIR/test.in' --output-file='$TEMPDIR/test.out' '$TEMPDIR/builtin.s' '$TEMPDIR/output.s'
 EOF
+    else
+        cat << EOF >&2
+Error: Ravel exits with a non-zero value $RAVEL_EXIT_CODE.
+You may run the following command again to see the error message:
+    ravel --input-file='$TEMPDIR/test.in' --output-file='$TEMPDIR/test.out' '$TEMPDIR/output.s'
+EOF
+    fi
     print_temp_dir
     exit 1
 fi

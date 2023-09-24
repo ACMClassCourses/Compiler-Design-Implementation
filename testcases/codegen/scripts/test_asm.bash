@@ -11,7 +11,7 @@
 # 1. Get an temporary directory
 # 2. Execute <compiler> < <testcase> > "$TEMPDIR/output.s"
 # 3. Get the test.in and test.ans from <testcase> using sed
-# 4. Execute ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" <builtin> "$TEMPDIR/output.s"
+# 4. Execute ravel --input-file="$TEMPDIR/test.in" --output-file="$TEMPDIR/test.out" "$TEMPDIR/output.s" [builtin]
 # 5. Compare the output and exit code
 
 # Usage
@@ -131,7 +131,7 @@ if [ $? -ne 0 ]; then
     cat << EOF >&2
 Error: Ravel exits with a non-zero value.
 You may run the following command again to see the error message:
-    ravel --input-file='$TEMPDIR/test.in' --output-file='$TEMPDIR/test.out' '$TEMPDIR/builtin.s' '$TEMPDIR/output.s'
+    ravel --input-file='$TEMPDIR/test.in' --output-file='$TEMPDIR/test.out' '$TEMPDIR/output.s' $BUILTIN
 EOF
     print_temp_dir
     exit 1
