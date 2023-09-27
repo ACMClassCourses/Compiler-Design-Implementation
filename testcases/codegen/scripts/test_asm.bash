@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: scripts/test.bash <compiler> <testcase> [builtin] [tempdir]
+# Usage: scripts/test_asm.bash <compiler> <testcase> [builtin] [tempdir]
 # The builtin and tempdir are optional. If there are three arguments, the
 # script will check whether the third argument is a file. If it is a file,
 # then it will be treated as the builtin file. Otherwise, it will be treated
@@ -17,7 +17,7 @@
 # Usage
 if [ $# -ne 2 ] && [ $# -ne 3 ] && [ $# -ne 4 ]; then
     cat << EOF >&2 
-Usage: $0 <complier> <testcase> [builtin] [tempdir]
+Usage: $0 <compiler> <testcase> [builtin] [tempdir]
        The builtin and tempdir are optional. If there are three arguments, the
        script will check whether the third argument is a file. If it is a file,
        then it will be treated as the builtin file. Otherwise, it will be

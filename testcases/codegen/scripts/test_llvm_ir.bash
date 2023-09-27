@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: scripts/test.bash <compiler> <testcase> [builtin] [tempdir]
+# Usage: scripts/test_llvm_ir.bash <compiler> <testcase> [builtin] [tempdir]
 # The builtin and tempdir are optional. If there are three arguments, the
 # script will check whether the third argument is a file. If it is a file,
 # then it will be treated as the builtin file. Otherwise, it will be treated
@@ -40,7 +40,7 @@ CLANG=$(get_clang)
 # Usage
 if [ $# -ne 3 ] && [ $# -ne 4 ]; then
     cat << EOF >&2 
-Usage: $0 <complier> <testcase> [builtin] [tempdir]
+Usage: $0 <compiler> <testcase> [builtin] [tempdir]
        The builtin and tempdir are optional. If there are three arguments, the
        script will check whether the third argument is a file. If it is a file,
        then it will be treated as the builtin file. Otherwise, it will be
@@ -146,10 +146,10 @@ if [ $? -ne 0 ]; then
     clean
     exit 1
 fi
-EXPECTED_EXIT_CODE=$(grep "ExitCode:" $2 | awk '{print $2}')
+EXPECTED_EXIT_CODE=$(grep "ExitCode:" $TESTCASE | awk '{print $2}')
 
 # 4. Compile the LLVM IR code with clang into RISC-V assembly
-echo "Compling your output '$TEMPDIR/output.ll' with clang..." >&2
+echo "Compiling your output '$TEMPDIR/output.ll' with clang..." >&2
 $CLANG -S --target=riscv32-unknown-elf "$TEMPDIR/output.ll" -o "$TEMPDIR/output.s.source" >&2
 if [ $? -ne 0 ]; then
     echo "Error: Failed to compile '$TEMPDIR/output.ll'." >&2
@@ -157,7 +157,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 if [ $HAS_BUILTIN -eq 1 ]; then
-    echo "Compling your builtin '$BUILTIN' with clang..." >&2
+    echo "Compiling your builtin '$BUILTIN' with clang..." >&2
     $CLANG -S --target=riscv32-unknown-elf "$BUILTIN" -o "$TEMPDIR/builtin.s.source" >&2
     if [ $? -ne 0 ]; then
         echo "Error: Failed to compile '$TEMPDIR/builtin.ll'." >&2
@@ -167,7 +167,7 @@ if [ $HAS_BUILTIN -eq 1 ]; then
 fi
 # remove the '@plt' suffix of the function name that is not supported by ravel
 remove_plt() {
-    sed 's/@plt$//g' $1 > $2
+    sed 's/@plt\s*([#;].*)?$//g' $1 > $2
 }
 remove_plt "$TEMPDIR/output.s.source" "$TEMPDIR/output.s"
 if [ $HAS_BUILTIN -eq 1 ]; then

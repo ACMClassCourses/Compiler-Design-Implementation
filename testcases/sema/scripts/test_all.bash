@@ -5,7 +5,7 @@
 #     scripts/test_all.bash '../../mxc -fsyntax-only' testcases/sema
 
 if [ $# -ne 2 ]; then
-    echo "Usage: $0 <complier> <sema_dir>" >&2
+    echo "Usage: $0 <compiler> <sema_dir>" >&2
     echo "       If you need to pass arguments to the compiler, please use" >&2
     echo "       quotation mark(') to pack the arguments along with the compiler" >&2
     echo "       command. For example," >&2
@@ -34,7 +34,7 @@ elif [ ! -f ${SEMA_DIR}judgelist.txt ]; then
     exit 1
 fi
 
-# judge_one_testscase <testcase>
+# judge_one_testcase <testcase>
 judge_one_testcase() {
     ${SEMA_DIR}scripts/test.bash "$COMPILER" $1 > /dev/null 2>&1
     if [ $? -ne 0 ]; then

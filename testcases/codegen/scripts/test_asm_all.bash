@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Usage: scripts/test.bash <compiler> <codegen_dir> [builtin]
+# Usage: scripts/test_asm_all.bash <compiler> <codegen_dir> [builtin]
 # The builtin is optional.
 # Example:
 #    scripts/test.bash 'bin/mxc -S' ./testcases/codegen bin/builtin.s
 
 if [ $# -ne 2 ] && [ $# -ne 3 ]; then
     cat << EOF >&2 
-Usage: $0 <complier> <codegen_dir> [builtin]
+Usage: $0 <compiler> <codegen_dir> [builtin]
        The builtin is optional.
        If you need to pass arguments to the compiler, please use
        quotation mark(') to pack the arguments along with the compiler
@@ -52,7 +52,7 @@ if [ $? -ne 0 ]; then
 fi
 
 FAILED_TESTCASE=""
-# judge_one_testscase <testcase> <name>
+# judge_one_testcase <testcase> <name>
 judge_one_testcase() {
     local TESTDIR="$TEMPDIR/$2"
     mkdir -p $TESTDIR
@@ -63,7 +63,7 @@ judge_one_testcase() {
         return 1
     else
         rm -rf $TESTDIR
-        print_green_msg "Pass testcases: '$1'"
+        print_green_msg "Pass testcases: '$1'."
         return 0
     fi
 }

@@ -13,22 +13,22 @@ fi
 COMPILER=$1
 TESTCASE=$2
 
-if [ ! -f $TESTCASE ]; then
+if [ ! -f "$TESTCASE" ]; then
     echo "Error: testcase file $TESTCASE does not exist" >&2
     exit 1
 fi
 
 # Get verdict
 # VERDICT = 1 if PASS, 0 if FAIL
-if [ $(grep "Verdict:" $TESTCASE | wc -l) -ne 1 ]; then
+if [ "$(grep -c "Verdict:" "$TESTCASE")" -ne 1 ]; then
     echo "Error: Verdict line not found in '$TESTCASE'." >&2
     echo "Please make sure this is a valid testcase file." >&2
     exit 1
 fi
-VERDICT_STRING=$(grep "Verdict:" $TESTCASE | awk '{print $2}')
-if [ $VERDICT_STRING == "Fail" ]; then
+VERDICT_STRING=$(grep "Verdict:" "$TESTCASE" | awk '{print $2}')
+if [ "$VERDICT_STRING" == "Fail" ]; then
     VERDICT=0
-else 
+else
     VERDICT=1
 fi
 
@@ -41,7 +41,7 @@ fail() {
     echo "Failed" >&2
     exit 1
 }
-$COMPILER < $TESTCASE > /dev/null
+$COMPILER < "$TESTCASE" > /dev/null
 RETURN_CODE=$?
 if [ $RETURN_CODE -ne 0 ]; then
     if [ $VERDICT -eq 0 ]; then
