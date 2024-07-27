@@ -1,0 +1,14 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Const Array
+Author: Shihan Fang
+Time: 2024-7-27
+Verdict: Fail
+Origin Package: Semantic Extended
+*/
+
+int main()
+{
+    int[][] a = {{1,2,3,4},{},{1,2,3,4},{},{1,2,3,4}};
+    a[2][2][2]=1;
+}
