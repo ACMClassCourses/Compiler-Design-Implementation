@@ -1,0 +1,22 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Formatted String
+Author: Yu Jiang
+Time: 2024-07-27
+Verdict: Success
+Origin Package: Semantic Pretest
+*/
+
+int main()
+{
+    int a1 = 0;
+    int a2 = 0;
+    int a3 = 0;
+    string s1 = f"a++'s value is {a1++}\n";
+    string s2 = f"++a's value is {++a2}\n";
+    string s3 = f"++++a's value is {++++a3}\n";
+    print(s1);
+    print(s2);
+    print(s3);
+    return 0;
+}
