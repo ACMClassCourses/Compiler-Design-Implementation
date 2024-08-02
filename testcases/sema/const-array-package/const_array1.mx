@@ -1,0 +1,16 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Const Array
+Author: Shihan Fang
+Time: 2024-7-27
+Verdict: Success
+Origin Package: Semantic Extended
+*/
+int[] a = new int[4];
+int[] c = {2, 0, 2, 4, 7, 27};
+
+int main()
+{
+    int[] b = new int[]{2, 0, 2, 4};
+    a=b;
+}

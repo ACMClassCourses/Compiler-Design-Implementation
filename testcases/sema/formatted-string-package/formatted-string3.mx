@@ -1,0 +1,16 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Formatted String
+Author: Yu Jiang
+Time: 2024-07-27
+Verdict: Success
+Origin Package: Semantic Pretest
+*/
+
+int main()
+{
+    string s1 = "{\\}\\{}";
+    string s2 = f"{{{f"\\{"}\\{"}"}}}";
+    println(f"{s1 == s2}");
+    return 0;
+}

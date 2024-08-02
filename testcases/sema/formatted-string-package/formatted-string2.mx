@@ -1,0 +1,14 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Formatted String
+Author: Yu Jiang
+Time: 2024-07-27
+Verdict: Fail
+Origin Package: Semantic Pretest
+*/
+
+int main()
+{
+    print(f"{null}\n");
+    return 0;
+}

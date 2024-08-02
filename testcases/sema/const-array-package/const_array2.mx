@@ -1,0 +1,13 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Const Array
+Author: Shihan Fang
+Time: 2024-7-27
+Verdict: Fail
+Origin Package: Semantic Extended
+*/
+int main()
+{
+    // type mismatch: can not assign int[2][2] to int[]
+    int[] a = new int[]{{2, 0}, {2, 4}};
+}

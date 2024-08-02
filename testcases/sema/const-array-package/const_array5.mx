@@ -1,0 +1,53 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Const Array
+Author: Shihan Fang
+Time: 2024-7-27
+Verdict: Success
+Origin Package: Semantic Extended
+*/
+
+int partition(int[] a, int p, int r) {
+  int pivot = a[r];
+  int i = p - 1;
+  int j;
+  for (j = p; j < r; ++j) {
+    if (a[j] <= pivot) {
+      ++i;
+      int t = a[i];
+      a[i] = a[j];
+      a[j] = t;
+    }
+  }
+  int t = a[i + 1];
+  a[i + 1] = a[r];
+  a[r] = t;
+  return i + 1;
+}
+
+void quick_sort(int[] a, int p, int r) {
+  if (p >= r)
+    return;
+  int q = partition(a, p, r);
+  quick_sort(a, p, q - 1);
+  quick_sort(a, q + 1, r);
+}
+
+void quick_sort_inf(int[] a) {
+  quick_sort(a, 0, a.size() - 1);
+}
+
+int main() {
+  int n = getInt();
+  int[] a = {4, 2, 46, 33, 100, 80, 53, 88, 18, 33, 76, 78, 62, 77, 73, 73, 44, 11, 61, 23, 17, 50, 91, 59, 10, 21, 37, 74, 65, 48, 48, 56, 44, 88, 95, 88, 96, 58, 73, 47, 90, 79, 16, 58, 49, 28, 74, 12, 96, 3};
+  int n = a.size();
+  int i;
+
+  quick_sort_inf(a);
+
+  for (i = 0; i < n; ++i)
+    print(toString(a[i]) + " ");
+  println("");
+
+  return 0;
+}

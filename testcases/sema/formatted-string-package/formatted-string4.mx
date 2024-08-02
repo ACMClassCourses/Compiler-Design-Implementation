@@ -1,0 +1,26 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Formatted String
+Author: Yu Jiang
+Time: 2024-07-27
+Verdict: Success
+Origin Package: Semantic Pretest
+*/
+int get_number_length(int x){
+    int a = x;
+    int cnt = 0;
+    while (a > 0){
+        cnt++;
+        a = a / 10;
+    }
+    return cnt;
+}
+int main()
+{
+    int a = getInt();
+    int cnt1 = get_number_length(a);
+    string s = f"{a}";
+    int cnt2 = s.length();
+    println(f"cnt1: {cnt1}\n cnt2:{cnt2}\n");
+    return 0;
+}
