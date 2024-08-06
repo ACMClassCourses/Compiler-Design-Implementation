@@ -1,0 +1,21 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Const Array
+Author: Ruiyan Hu
+Time: 2024-8-7
+Verdict: Fail
+Origin Package: Semantic Extended
+*/
+
+int main() {
+  // An array literal should contain ONLY ONE type of element.
+  {
+	{ {1, 2, 3}, {}, {} },
+	{},
+	{},
+	{},
+	{{}, {}, {}, {}, {}},
+	{{}},
+	{{true}}
+  };
+}

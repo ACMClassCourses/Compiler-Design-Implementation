@@ -39,5 +39,9 @@ int main() {
   if (array3[0][0] != array3[2][0]) {
     ++cnt;
   }
+  // A very loooooooooong array can still be represented by a single '{}', and with no real elements
+  int[][][][][][][][][][] array4 = {};
+  bool[][][][][][][][][][] array5 = {};
+  string[][][][][][][][][][] array6 = {};
   printInt(cnt);
 }
