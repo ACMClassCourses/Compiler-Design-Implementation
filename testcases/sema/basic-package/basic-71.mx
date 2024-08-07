@@ -1,0 +1,18 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Basic
+Author: 22' Dark
+Time: 2025-2-29
+Verdict: Fail
+Origin Package: Semantic Pretest
+*/
+
+int dark() {
+    return 0;
+}
+
+int dark;
+
+int main() {
+    return dark();
+}

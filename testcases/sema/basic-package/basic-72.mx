@@ -1,0 +1,25 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Basic
+Author: 22' Dark
+Time: 2025-2-29
+Verdict: Success
+Origin Package: Semantic Pretest
+*/
+
+class dark {
+    int x;
+    dark() {
+        x = 0;
+        return;
+    }
+};
+
+int dark;
+
+int main() {
+    dark jpp = new dark();
+    dark = dark + 1919810;
+    dark = dark % 114514;
+    return jpp.x;
+}
