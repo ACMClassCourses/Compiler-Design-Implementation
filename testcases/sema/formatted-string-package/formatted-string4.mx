@@ -19,8 +19,8 @@ int main()
 {
     int a = getInt();
     int cnt1 = get_number_length(a);
-    string s = f"{a}";
+    string s = f"$a$";
     int cnt2 = s.length();
-    println(f"cnt1: {cnt1}\n cnt2:{cnt2}\n");
+    println(f"cnt1: $cnt1$\n cnt2:$cnt2$\n");
     return 0;
 }

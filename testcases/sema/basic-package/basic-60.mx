@@ -1,23 +1,36 @@
 /*
 Test Package: Sema_Local_Preview
 Test Target: Basic
-Author: 16' Hongyu Yan
-Time: 2019-11-11
+Author: Pikachu
+Time: 2020-02-02
 Verdict: Success
-Origin Package: Semantic Pretest
+Origin Package: Semantic
 */
-int yhy(int yhy){
-	return yhy;
-}
-
 int main() {
-	A c;
-	return yhy(c.b.a.b.a.v[10]);
+    int a;
+    bool b;
+    string c;
+    bool flag = true;
+    {
+        if (b == b) {
+            flag = false;
+        }
+        int b;
+        bool c;
+        int a;
+        {
+            int c;
+            if (a + a - a == a) {
+                flag = true;
+            }
+            bool a;
+            string b;                                                                                                 {int [][][][][][][][][][][][][][][][][][][][] a = new int [1][1][1][1][1][1][1][1][1][1][1][1][1][1][1][][][][][];
+                {
+                    return 0;
+                }
+            }
+        }
+    }
+    return 0;
+    return 0;
 }
-class A {
-	int [] v;
-	B b;
-};
-class B {
-	A a;
-};

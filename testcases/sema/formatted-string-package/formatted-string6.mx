@@ -1,0 +1,14 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Formatted String
+Author: Ruiyan Hu
+Time: 2024-8-5
+Verdict: Success
+Origin Package: Semantic Pretest
+*/
+
+int main() {
+  // Your program must be robust enough to format highly complicated strings.
+  string s = f"$f"$"We are testing whether $"$ $$"$ $f"{1,1,4,5}[2]==$$ $f"$"$"$"$ {1,1,1}[1]"$: $f" $f"$$$$ (new int[]{1,1,4,5})[2] == $f"$"$"$"$$f"$"$"$"$ (new int[]{1,1,1})[1]"$"$";
+  print(s);
+}

@@ -13,6 +13,6 @@ void greet(){
 
 int main()
 {
-    println(f"{greet()}");
+    println(f"$greet()$");
     return 0;
 }
