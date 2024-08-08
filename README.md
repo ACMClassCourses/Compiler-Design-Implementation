@@ -252,9 +252,9 @@ Mx* 语言的数组常量用法接近Java语言。
 以下为一个合法的二维数组常量
 ```java
 {
-	{2,0,2,4},
-	{},
-	{7,8}
+    {2,0,2,4},
+    {},
+    {7,8}
 };
 ```
 
@@ -435,7 +435,7 @@ class <classIdentifier> {
 
 ```java
 <ClassIdentifier>(){
-	<Expressions and Statements>
+    <Expressions and Statements>
 }
 ```
 
@@ -455,7 +455,7 @@ class <classIdentifier> {
 
 ```java
 <returnType> <functionIdentifier>(<functionParameterList>){
-	<expressionsAndStatements>
+    <expressionsAndStatements>
 }
 ```
 
@@ -668,9 +668,9 @@ f"$f"$$$$" == "$$"$" == "true"
 
 ```c++
 if (<conditionExpression>) {
-	<Expressions and Statements if true>
+    <Expressions and Statements if true>
 } else {
-	<Expressions and Statements if false>
+    <Expressions and Statements if false>
 }
 ```
 
@@ -690,7 +690,7 @@ if (<conditionExpression>) {
 
 ```c++
 while (<whileConditionExpression>) {
-	<Expressions and Statements if true>
+    <Expressions and Statements if true>
 }
 ```
 
@@ -700,7 +700,7 @@ while (<whileConditionExpression>) {
 
 ```c++
 for (<initializationStatement>; <forConditionExpression>; <stepExpression>) {
-	<Expressions and Statements if true>
+    <Expressions and Statements if true>
 }
 ```
 
