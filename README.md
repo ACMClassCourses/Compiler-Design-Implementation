@@ -270,6 +270,41 @@ int[] array;
 array= new int[]{2, 0, 2, 4};
 ```
 
+需要注意，省略 `new` 的写法只是一种 **语法糖** ，其在语义上等价于显式调用 `new` 的写法。高维嵌套常量数组也是类似的。
+
+```java
+// 语法糖
+int [][] array = {
+    {1, 2, 3},
+    {}
+};
+
+// 等价于
+int [][] array;
+array = new int[2][];
+array[0] = new int[3];
+array[0][0] = 1;
+array[0][1] = 2;
+array[0][2] = 3;
+array[1] = new int[0];
+```
+
+同时，数组常量不能单独作为一个表达式使用。其仅可以用于变量的初始化、赋值语句、函数入参的初始化以及函数的返回值。
+
+> 需要特别注意的是，数组常量的赋值语句是引用赋值，具体可以参考 [7.2. 数组类型](#72-数组类型)。
+
+```java
+int [] func(int [] x) {
+    return { 1, 9, 1, 9, 8, 1, 0 };     // OK, return value
+}
+
+void test() {
+    int [][] array = { {}, {} };        // OK, initialization
+    array = { {1, 1, 4}, {}, {5, 1, 4}};// OK, assignment
+    func( {} );                         // OK, function parameter
+}
+```
+
 #### 7. 变量
 
 ##### 7.1. 基础类型
