@@ -8,7 +8,6 @@ Origin Package: Semantic Extended
 */
 
 int main() {
-  // An array literal should contain ONLY ONE type of element.
   int[][][] a = {
 	{ {1, 2, 3}, {}, {} },
 	{},
@@ -16,6 +15,6 @@ int main() {
 	{},
 	{{}, {}, {}, {}, {}},
 	{{}},
-	{{true}}
+	{{true}} // Error: Type mismatched
   };
 }

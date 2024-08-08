@@ -6,7 +6,7 @@ Time: 2024-7-27
 Verdict: Success
 Origin Package: Semantic Extended
 */
-int[] a = new int[4];
+int[] a = new int[3];
 int[] c = {2, 0, 2, 4, 7, 27};
 
 int main()

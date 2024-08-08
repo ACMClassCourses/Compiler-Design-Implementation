@@ -8,6 +8,6 @@ Origin Package: Semantic Extended
 */
 int main()
 {
-    // type mismatch: can not assign int[2][2] to int[]
+    // should be int[][]a = new int[][]{{2, 0}, {2, 4}};
     int[] a = new int[]{{2, 0}, {2, 4}};
 }
