@@ -1,0 +1,20 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Const Array
+Author: Ruiyan Hu
+Time: 2024-8-7
+Verdict: Fail
+Origin Package: Semantic Extended
+*/
+
+int main() {
+  int[][][] a = {
+	{ {1, 2, 3}, {}, {} },
+	{},
+	{},
+	{},
+	{{}, {}, {}, {}, {}},
+	{{}},
+	{{true}} // Error: Type mismatched
+  };
+}

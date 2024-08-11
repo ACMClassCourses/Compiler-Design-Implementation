@@ -9,6 +9,6 @@ Origin Package: Semantic Pretest
 
 int main()
 {
-    print(f"{null}\n");
+    print(f"$null$\n");
     return 0;
 }

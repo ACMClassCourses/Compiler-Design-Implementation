@@ -1,0 +1,15 @@
+/*
+Test Package: Sema_Local_Preview
+Test Target: Formatted String
+Author: Ruiyan Hu
+Time: 2024-8-7
+Verdict: Success
+Origin Package: Semantic Pretest
+*/
+
+int main() {
+  string x = "$$", y = "$$$$", z = "$$$$$";
+  // Even if '$$' is a special token for string, you SHOULD NOT mistake it for two continuous $expr1$$expr2$
+  string s = f"$$$$$$$$$$$x$$$$$$$$y$$z$$"$$"$";
+  print(s);
+}

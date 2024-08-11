@@ -1,16 +1,25 @@
 /*
 Test Package: Sema_Local_Preview
 Test Target: Basic
-Author: 21' LIU Yiyu
-Time: 2023-08-02
-Verdict: Fail
-Comment: Postfix ++ has higher priority compared to prefix ++, so ++a++ will
-         be parsed as ++(a++), where (a++) is a right value.
+Author: 22' Dark
+Time: 2025-2-29
+Verdict: Success
 Origin Package: Semantic Pretest
 */
-int main()
-{
-    int a;
-    ++a++;
-    return 0;
+
+class dark {
+    int x;
+    dark() {
+        x = 0;
+        return;
+    }
+};
+
+int dark;
+
+int main() {
+    dark jpp = new dark();
+    dark = dark + 1919810;
+    dark = dark % 114514;
+    return jpp.x;
 }
