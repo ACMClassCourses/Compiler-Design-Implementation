@@ -1,0 +1,27 @@
+/*
+Test Package: Codegen
+Author: 22' Shihan Fang
+Time: 2024-08-13
+Input:
+=== input ===
+
+=== end ===
+Output:
+=== output ===
+2
+0
+2
+4
+=== end ===
+ExitCode: 0
+InstLimit: -1
+*/
+
+int main() {
+    int[] a = new int[]{2, 0, 2, 4};
+    int n = a.size();
+    for(int i=0;i<n;++i){
+        printlnInt(a[i]);
+    }
+    return 0;
+}
