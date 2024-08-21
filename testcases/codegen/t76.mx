@@ -25,11 +25,11 @@ int i = 0;
 int j = 0;
 int main(){
     for(i = 1; i < 10; i++){
-    string line = "";
-    for(j = 1; j < 10; j++){
-        line = line + f"$i$*$j$=$i*j$ ";
-    }
-    println(line);
+        string line = "";
+        for(j = 1; j < 10; j++){
+            line = line + f"$i$*$j$=$i*j$ ";
+        }
+        println(line);
     }
     return 0;
 }
