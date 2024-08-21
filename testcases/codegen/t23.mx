@@ -1032,6 +1032,7 @@ move A --> B
 move A --> C
 move B --> C
 1023
+
 === end ===
 ExitCode: 0
 InstLimit: -1
